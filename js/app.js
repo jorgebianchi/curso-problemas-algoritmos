@@ -228,7 +228,6 @@ ${sec("03", "Bibliografía", libros.map((b) => `<div class="biblio-item"><div cl
     const L = libro(b);
     const links = [];
     if (L.url) links.push(`<a href="${L.url}" target="_blank" rel="noopener">online ↗</a>`);
-    if (L.local) links.push(`<a href="${encodeURI(L.local)}" target="_blank" rel="noopener" title="Disponible sólo si tenés el PDF en la carpeta del curso">PDF local</a>`);
     return links.length ? ` <span class="faint">· ${links.join(" · ")}</span>` : "";
   }
 
@@ -359,14 +358,14 @@ ${sec("07", "¿Y ahora qué?", `
   function vBiblio() {
     const item = (L) => `<div class="biblio-item"><div class="ti">${esc(L.titulo)}</div>
       <div class="meta">${esc(L.autor)} · ${esc(L.editorial)} · ${esc(L.anio)} · <span class="tag">${L.idioma === "es" ? "español" : "inglés"}</span>
-      ${L.url ? ` · <a href="${L.url}" target="_blank" rel="noopener">acceso libre ↗</a>` : ""}${L.local ? ` · <a href="${encodeURI(L.local)}" target="_blank" rel="noopener">PDF local</a>` : ""}</div>
+      ${L.url ? ` · <a href="${L.url}" target="_blank" rel="noopener">acceso libre ↗</a>` : ""}</div>
       <div class="muted" style="font-size:.94rem">${esc(L.nota)}</div></div>`;
     const todos = Object.values(BIBLIO);
     const link = (x) => `<div class="biblio-item"><div class="ti"><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></div><div class="muted" style="font-size:.94rem">${esc(x.d)}</div></div>`;
     return pageHero("Material", "Bibliografía <em>y recursos</em>",
       "Los tres libros base cubren el núcleo. El resto amplía, ofrece otro enfoque o es de acceso libre.") + `
 <div class="wrap">
-${sec("01", "Libros base", todos.filter((l) => l.base).map(item).join("") + `<p class="faint" style="margin-top:1rem">Los enlaces «PDF local» funcionan cuando abrís el sitio desde la carpeta del curso con tus copias de los libros (no se publican en el repositorio).</p>`)}
+${sec("01", "Libros base", todos.filter((l) => l.base).map(item).join(""))}
 ${sec("02", "Complementarios en español", todos.filter((l) => !l.base && l.idioma === "es").map(item).join(""))}
 ${sec("03", "Complementarios en inglés", todos.filter((l) => !l.base && l.idioma === "en").map(item).join(""))}
 ${sec("04", "Jueces online y práctica", PLATAFORMAS.map(link).join(""))}

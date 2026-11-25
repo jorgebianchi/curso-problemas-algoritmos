@@ -16,21 +16,21 @@ const BIBLIO = {
     titulo: "Cómo plantear y resolver problemas",
     editorial: "Trillas", anio: "1965 (orig. How to Solve It, 1945)", idioma: "es",
     nota: "El clásico de la heurística. Las 4 fases (comprender, concebir un plan, ejecutarlo, examinar la solución) son la columna vertebral de todo el curso.",
-    local: "Polya - Como plantear y resolver problemas.pdf", base: true
+    base: true
   },
   joyanes: {
     autor: "Luis Joyanes Aguilar",
     titulo: "Fundamentos de programación. Algoritmos, estructura de datos y objetos (4.ª ed.)",
     editorial: "McGraw-Hill", anio: "2008", idioma: "es",
     nota: "Texto principal para algoritmos, pseudocódigo, estructuras de control, arrays, ordenación, estructuras dinámicas, árboles, grafos y recursividad.",
-    local: "Fundamentos-de-programacin-4ta-Edicin-Luis-Joyanes-Aguilar-2.pdf", base: true
+    base: true
   },
   joyanesProb: {
     autor: "L. Joyanes Aguilar, L. Rodríguez Baena, M. Fernández Azuela",
     titulo: "Fundamentos de programación. Libro de problemas",
     editorial: "McGraw-Hill", anio: "1996", idioma: "es",
     nota: "Ejercicios resueltos capítulo por capítulo (análisis, diseño, pseudocódigo). Ideal para practicar antes de pasar a código.",
-    local: "Joyanes - Fundamentos de programacion (libro de problemas).pdf", base: true
+    base: true
   },
   // --- Complementarios en español
   pythoned: {

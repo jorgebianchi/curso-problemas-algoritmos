@@ -31,7 +31,7 @@ Cada semana incluye objetivos, una lección con ejemplos en Python, lecturas por
 - L. Joyanes Aguilar, *Fundamentos de programación* 4.ª ed. (McGraw-Hill).
 - L. Joyanes, L. Rodríguez, M. Fernández, *Fundamentos de programación. Libro de problemas* (McGraw-Hill).
 
-Los PDF **no** se incluyen en el repositorio (derechos de autor). Si los tenés, ponelos en la raíz de la carpeta con los nombres que figuran en `js/data.js` y los enlaces «PDF local» funcionarán al abrir el sitio localmente.
+Los PDF de estos libros **no** se incluyen en el repositorio (derechos de autor).
 
 ## Uso local
 
