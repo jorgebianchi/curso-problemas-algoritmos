@@ -333,6 +333,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--rust); outline: 
   .pager span:empty { display: none; }
   .pager a + a, .pager span + a { text-align: left; border-top: 1px solid var(--line); }
 }
+
+/* ===== Banco de soluciones ===== */
+.sol-tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 28px 0 8px; }
+.sol-tabs a { font-size: .85rem; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; color: var(--ink-2); }
+.sol-tabs a:hover { border-color: var(--rust); color: var(--rust); }
+.sol-tabs a.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+details.sol { border-top: 1px solid var(--line); }
+details.sol:last-child { border-bottom: 1px solid var(--line); }
+details.sol > summary { list-style: none; cursor: pointer; padding: 14px 2rem 14px 0; position: relative; }
+details.sol > summary::-webkit-details-marker { display: none; }
+details.sol > summary::after { content: "+"; position: absolute; right: 4px; top: 12px; color: var(--rust); font-size: 1.3rem; font-weight: 300; line-height: 1; }
+details.sol[open] > summary::after { content: "−"; }
+details.sol > summary .kind { font-size: .68rem; text-transform: uppercase; letter-spacing: .16em; color: var(--rust); font-weight: 500; display: block; margin-bottom: 2px; }
+details.sol > summary:hover .tx { color: var(--rust-dark); }
+.sol-body { padding: 4px 0 22px; }
+.sol-body h4:first-child { margin-top: .4rem; }
+.sol-err { color: var(--rust-dark); background: var(--sand); padding: 8px 12px; border-radius: var(--radius); font-size: .92rem; }
+@media print {
+  .sol-tabs, details.sol > summary::after { display: none !important; }
+  details.sol { break-inside: avoid-page; }
+  .sol-body pre { white-space: pre-wrap; font-size: 8.5pt; border-left-width: 2px; }
+  .page-hero { padding: 0 0 12px; }
+  .page-hero::after { display: none; }
+  body { font-size: 11pt; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }

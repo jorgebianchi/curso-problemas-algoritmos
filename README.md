@@ -37,6 +37,20 @@ Los PDF de estos libros **no** se incluyen en el repositorio (derechos de autor)
 
 - [`descargas/ficha-polya.pdf`](descargas/ficha-polya.pdf): ficha imprimible con las 4 fases de Pólya (A4, 2 páginas). Fuente editable: `descargas/ficha-polya.html` (se regenera imprimiendo a PDF desde Chrome).
 
+## Banco de soluciones (protegido)
+
+La vista `#/soluciones` contiene las resoluciones de ejercicios, problemas, parcial y final, organizadas por materia (con opción de guardar cada materia como PDF). Como el sitio es estático, el contenido se publica **cifrado** (AES-256-GCM, clave derivada con PBKDF2-SHA256) y se descifra en el navegador con la contraseña. La contraseña se solicita por correo.
+
+- Soluciones en texto plano: `privado/*.mjs` (**no** se versiona).
+- Contraseña: `.env` → `SOLUCIONES_PASSWORD` (**no** se versiona; ver `.env.example`).
+- Para regenerar el archivo cifrado después de editar soluciones o cambiar la contraseña:
+
+```bash
+node scripts/encriptar-soluciones.mjs   # escribe js/soluciones.enc.js
+```
+
+> Guardá una copia de `privado/` y `.env` en un lugar seguro: no están en el repositorio.
+
 ## Uso local
 
 ```bash

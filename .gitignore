@@ -2,3 +2,7 @@
 *.pdf
 .DS_Store
 !descargas/*.pdf
+
+# Secretos y soluciones en texto plano (sólo se publica la versión cifrada)
+.env
+privado/

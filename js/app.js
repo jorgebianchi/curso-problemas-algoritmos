@@ -250,7 +250,7 @@ ${sec("02", "Lección", `<div class="lesson">${s.leccion}</div>`)}
 ${sec("03", "Lecturas", `<ul class="modules simple">${s.lecturas.map((l, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${esc(l.c)}</span><span class="s">${esc(libro(l.b).autor)} — <em>${esc(libro(l.b).titulo)}</em>${linkLibro(l.b)}</span></span></div></li>`).join("")}</ul>`)}
 ${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}${ARR}</a></li>`).join("")}</ul>`)}
 ${sec("05", "Actividades", `
-<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya. ${fichaLink()}</p>
+<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya. ${fichaLink()} · <a class="dl" href="#/soluciones/${m.id}/${n}">${LOCK}<span>Soluciones de esta semana</span></a></p>
 <ul class="tasks">
 ${s.tareas.map((t, i) => {
   const id = tid(n, i), done = !!S.tareas[id];
@@ -452,6 +452,117 @@ ${sec("04", "Respaldo", `
 </div>`;
   }
 
+  /* ---------- Banco de soluciones (cifrado) ---------- */
+  const SOL_EMAIL = "cocobianchi@gmail.com";
+  const SOL_PASS_KEY = "rpa-sol-pass";
+  const LOCK = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.2" y="5.2" width="7.6" height="5.3" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 5.2V3.8a2 2 0 0 1 4 0v1.4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+  let SOL = null;          // soluciones descifradas (sólo en memoria)
+  let solError = "";
+
+  function cargarCifrado() {
+    if (window.SOLUCIONES_ENC) return Promise.resolve(window.SOLUCIONES_ENC);
+    return new Promise((ok, mal) => {
+      const sc = document.createElement("script");
+      sc.src = "js/soluciones.enc.js";
+      sc.onload = () => ok(window.SOLUCIONES_ENC);
+      sc.onerror = () => mal(new Error("No se pudo cargar el banco de soluciones."));
+      document.head.appendChild(sc);
+    });
+  }
+  const deB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  async function descifrar(pass) {
+    if (!window.crypto || !crypto.subtle) throw new Error("Tu navegador no permite descifrar (se necesita HTTPS).");
+    const E = await cargarCifrado();
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+    const clave = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: deB64(E.salt), iterations: E.iter, hash: "SHA-256" },
+      base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    let plano;
+    try { plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(E.iv) }, clave, deB64(E.data)); }
+    catch { throw new Error("Contraseña incorrecta."); }
+    return JSON.parse(new TextDecoder().decode(plano)).sol;
+  }
+  async function desbloquear(pass, silencioso) {
+    try {
+      SOL = await descifrar(pass);
+      sessionStorage.setItem(SOL_PASS_KEY, pass);
+      solError = "";
+    } catch (e) {
+      SOL = null;
+      sessionStorage.removeItem(SOL_PASS_KEY);
+      solError = silencioso ? "" : e.message;
+    }
+    if (location.hash.startsWith("#/soluciones")) render();
+  }
+
+  const mailSol = () => `mailto:${SOL_EMAIL}?subject=${encodeURIComponent("Solicitud de contraseña — Banco de soluciones")}&body=${encodeURIComponent("Hola, quisiera la contraseña del banco de soluciones del curso de Resolución de problemas y algoritmos.\n\nNombre:\nMotivo / semana en la que estoy:\n")}`;
+
+  function vSolBloqueada() {
+    return pageHero("Material protegido", "Banco de <em>soluciones</em>",
+      "Resoluciones de los ejercicios, problemas, parcial y examen final, con explicación, código comentado y complejidad.") + `
+<div class="wrap">
+${sec(LOCK.replace('class="arr"', 'class="arr" style="width:1.1em;height:1.1em;margin:0"'), "Acceso con contraseña", `
+<form id="f-sol" class="panel" autocomplete="off" style="max-width:520px">
+  <div class="field"><label for="sol-pass">Contraseña</label>
+    <input type="password" id="sol-pass" inputmode="numeric" required autofocus style="font:inherit;font-size:16px;width:100%;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink)"></div>
+  ${solError ? `<p class="sol-err" role="alert">${esc(solError)}</p>` : ""}
+  <button class="btn primary" type="submit" id="sol-btn">Desbloquear</button>
+</form>
+<p>¿No tenés la contraseña? Pedila por correo a <a href="${mailSol()}">${SOL_EMAIL}</a>.</p>
+<div class="callout"><strong>Antes de mirar una solución:</strong> intentá el problema al menos 45–60 minutos con la ficha de Pólya. Leer la solución sin haber peleado el problema enseña muy poco. Si la leés, cerrala y reescribila de cero al día siguiente.</div>`)}
+</div>`;
+  }
+
+  function bloqueSol(blq) {
+    if (typeof blq === "string") return blq;
+    return `<pre><code>${esc(blq.c)}</code></pre>`;
+  }
+
+  function vSoluciones(mid, semAncla) {
+    if (!SOL) {
+      const guardada = sessionStorage.getItem(SOL_PASS_KEY);
+      if (guardada) { desbloquear(guardada, true); return pageHero("Material protegido", "Banco de <em>soluciones</em>", "Descifrando…"); }
+      return vSolBloqueada();
+    }
+    const m = materia(mid) || MATERIAS[0];
+    const tabs = `<div class="sol-tabs no-print" role="tablist">${MATERIAS.map((x) =>
+      `<a role="tab" href="#/soluciones/${x.id}" class="${x.id === m.id ? "active" : ""}" aria-selected="${x.id === m.id}">${pad2(x.n)} · ${esc(x.nombre)}</a>`).join("")}</div>`;
+    let total = 0;
+    const semanas = m.semanas.map(semana).map((s) => {
+      const items = s.tareas.map((t, i) => [t, tid(s.n, i)]).filter(([, id]) => SOL[id]);
+      total += items.length;
+      const cuerpo = items.length ? items.map(([t, id]) => {
+        const so = SOL[id];
+        return `<details class="sol" id="sol-${id}">
+  <summary><span class="kind">${TIPOS[t.t] || t.t}</span><span class="tx">${esc(t.x)}</span></summary>
+  <div class="sol-body">${so.x ? `<p><span class="tag accent">Complejidad: ${esc(so.x)}</span></p>` : ""}${so.b.map(bloqueSol).join("")}</div>
+</details>`;
+      }).join("") : `<p class="faint">Esta semana no tiene ejercicios con solución (sólo lecturas y reflexión personal).</p>`;
+      return sec(`Semana ${pad2(s.n)}`, `<a href="#/semana/${s.n}" style="text-decoration:none">${esc(s.titulo)}</a>`, cuerpo, ` id="sol-sem-${s.n}"`);
+    }).join("");
+    setTimeout(() => {
+      if (semAncla) { const el = document.getElementById("sol-sem-" + semAncla); if (el) el.scrollIntoView(); }
+    }, 0);
+    return pageHero(`Material protegido · Materia ${pad2(m.n)}`, "Banco de <em>soluciones</em>",
+      esc(m.nombre), `
+<div class="btn-row no-print">
+  <button class="btn primary" type="button" id="sol-print">${DL}Guardar PDF de esta materia</button>
+  <button class="btn" type="button" id="sol-expand">Expandir todo</button>
+  <button class="btn" type="button" id="sol-lock">${LOCK}Bloquear</button>
+</div>
+<p class="faint" style="margin-top:.8rem">${total} soluciones en esta materia. Para el PDF, elegí «Guardar como PDF» en el diálogo de impresión.</p>`) + `
+<div class="wrap">${tabs}${semanas}</div>`;
+  }
+
+  // Al imprimir, abrir todas las soluciones; al terminar, restaurar.
+  let abiertas = [];
+  window.addEventListener("beforeprint", () => {
+    abiertas = [...document.querySelectorAll("details.sol")].map((d) => d.open);
+    document.querySelectorAll("details.sol").forEach((d) => (d.open = true));
+  });
+  window.addEventListener("afterprint", () => {
+    document.querySelectorAll("details.sol").forEach((d, i) => (d.open = abiertas[i] ?? d.open));
+  });
+
   function vNoEncontrado() {
     return pageHero("Error 404", "No <em>encontrado</em>", "<a href=\"#/\">Volver al inicio</a>");
   }
@@ -460,7 +571,7 @@ ${sec("04", "Respaldo", `
   const app = $("#app");
   function render() {
     const h = location.hash.replace(/^#\/?/, "");
-    const [r, a] = h.split("/");
+    const [r, a, b] = h.split("/");
     let html, nav = r || "inicio";
     if (!r || r === "inicio") html = vInicio();
     else if (r === "plan") html = vPlan();
@@ -469,6 +580,7 @@ ${sec("04", "Respaldo", `
     else if (r === "guia") html = vGuia();
     else if (r === "bibliografia") html = vBiblio();
     else if (r === "progreso") html = vProgreso();
+    else if (r === "soluciones") { html = vSoluciones(a, b); }
     else html = vNoEncontrado();
     app.innerHTML = html;
     document.querySelectorAll("#nav-links a").forEach((x) => x.classList.toggle("active", x.dataset.nav === nav));
@@ -531,6 +643,9 @@ ${sec("04", "Respaldo", `
     } else if (ev.target.id === "f-config") {
       S.config = { nombre: $("#c-nombre").value.trim(), inicio: $("#c-inicio").value, horasMeta: Number($("#c-meta").value) || 10 };
       guardar(); render(); toast("Configuración guardada");
+    } else if (ev.target.id === "f-sol") {
+      const btn = $("#sol-btn"); btn.disabled = true; btn.textContent = "Verificando…";
+      desbloquear($("#sol-pass").value.trim(), false);
     }
   });
 
@@ -544,6 +659,15 @@ ${sec("04", "Respaldo", `
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = `progreso-algoritmos-${hoyISO()}.json`; a.click();
       URL.revokeObjectURL(a.href);
+    } else if (el.id === "sol-print") {
+      window.print();
+    } else if (el.id === "sol-expand") {
+      const ds = [...document.querySelectorAll("details.sol")];
+      const abrir = ds.some((d) => !d.open);
+      ds.forEach((d) => (d.open = abrir));
+      el.textContent = abrir ? "Contraer todo" : "Expandir todo";
+    } else if (el.id === "sol-lock") {
+      SOL = null; sessionStorage.removeItem(SOL_PASS_KEY); render(); toast("Banco de soluciones bloqueado");
     } else if (el.id === "b-reset") {
       if (confirm("¿Borrar TODO tu progreso, notas y sesiones? No se puede deshacer (exportá antes).")) { S = vacio(); guardar(); render(); toast("Progreso borrado"); }
     }
