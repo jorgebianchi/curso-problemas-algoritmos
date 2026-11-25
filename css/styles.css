@@ -378,3 +378,18 @@ details.sol > summary:hover .tx { color: var(--rust-dark); }
   header.top, footer, .band, .cta, .pager, .no-print { display: none !important; }
   .sec { grid-template-columns: 1fr; }
 }
+
+/* ---------- Glosario: término clickeable + popup ---------- */
+.term { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: help; border-bottom: 1px dashed var(--rust); }
+.term:hover, .term:focus-visible { color: var(--rust-dark); }
+.glosario { width: min(640px, calc(100vw - 2rem)); max-height: calc(100vh - 3rem); padding: 0; border: 1px solid var(--line); border-top: 3px solid var(--rust); border-radius: var(--radius); background: var(--paper); color: var(--ink); box-shadow: 0 18px 50px rgba(0, 0, 0, .25); }
+.glosario[open] { display: flex; flex-direction: column; }
+.glosario::backdrop { background: rgba(20, 18, 16, .55); }
+.glosario-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem .6rem; border-bottom: 1px solid var(--line); }
+.glosario-head h3 { margin: 0; font-weight: 400; font-size: 1.25rem; }
+.glosario-cuerpo { padding: 1rem 1.25rem 1.25rem; overflow-y: auto; }
+.glosario-cuerpo h4 { margin: 1.2rem 0 .5rem; }
+.glosario-cuerpo pre { font-size: .8rem; }
+.glosario-cuerpo ol, .glosario-cuerpo ul { padding-left: 1.3rem; }
+.glosario-cuerpo li { margin-bottom: .35rem; }
+@media print { .glosario { display: none !important; } }

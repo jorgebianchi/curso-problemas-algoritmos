@@ -351,7 +351,7 @@ print(a + b)
 # una lista de números en una línea
 nums = list(map(int, input().split()))</code></pre>
 <h4>Cómo funciona un juez online</h4>
-<p>El juez ejecuta tu programa con entradas ocultas y compara la salida <em>exacta</em>. Veredictos comunes: <code>AC</code> (aceptado), <code>WA</code> (respuesta incorrecta), <code>TLE</code> (tiempo excedido), <code>RE</code> (error en ejecución). Leé las restricciones: te dicen cuán eficiente debe ser la solución.</p>
+<p>Un <button type="button" class="term" data-term="juez-online">juez online</button> ejecuta tu programa con entradas ocultas y compara la salida <em>exacta</em>. Veredictos comunes: <code>AC</code> (aceptado), <code>WA</code> (respuesta incorrecta), <code>TLE</code> (tiempo excedido), <code>RE</code> (error en ejecución). Leé las restricciones: te dicen cuán eficiente debe ser la solución.</p>
 <div class="callout warn">No imprimas mensajes como "Ingrese un número": el juez los toma como parte de la respuesta.</div>`,
     lecturas: [
       { b: "pytut", c: "Secciones 1 a 3 («Usando Python como calculadora»)" },
@@ -1124,4 +1124,63 @@ def union(a, b):
 const TIPOS = {
   leer: "Lectura", ver: "Video / curso", practicar: "Práctica", problema: "Problema",
   reflexion: "Reflexión", proyecto: "Proyecto", examen: "Evaluación"
+};
+
+/* Glosario: términos que se abren en un popup al hacer clic.
+   Uso en el HTML: <button type="button" class="term" data-term="clave">texto</button> */
+const GLOSARIO = {
+  "juez-online": {
+    titulo: "Juez online",
+    html: `
+<p>Un sitio web con problemas de programación. Subís tu código, el juez lo ejecuta con entradas que no ves y compara tu salida con la correcta, carácter por carácter.</p>
+<h4>¿Cuál usamos?</h4>
+<ul>
+<li><strong><a href="https://cses.fi/problemset/" target="_blank" rel="noopener">CSES Problem Set</a></strong>: el juez principal del curso. Tiene unos 300 problemas clásicos ordenados por tema. Los enunciados están en inglés, pero son cortos y simples.</li>
+<li><strong><a href="https://aceptaelreto.com/" target="_blank" rel="noopener">Acepta el Reto</a></strong>: está en español y es ideal para las primeras semanas.</li>
+</ul>
+<p>Cada tarea de tipo «Problema» trae el enlace al problema exacto. Hay otros jueces en <a href="#/bibliografia">Bibliografía → Jueces online y práctica</a>.</p>
+<h4>Cómo enviar una solución (CSES)</h4>
+<ol>
+<li>Creá una cuenta (<em>Register</em>) e iniciá sesión.</li>
+<li>Abrí el problema y leé el enunciado, las restricciones y el ejemplo.</li>
+<li>Probalo primero en tu compu con el ejemplo del enunciado:
+<pre><code>python3 sol.py &lt; entrada.txt</code></pre></li>
+<li>En la pestaña <em>Submit</em>, elegí el archivo <code>.py</code>, el lenguaje <strong>Python3</strong> (o <strong>PyPy3</strong>, que es más rápido) y enviá.</li>
+<li>Mirá el veredicto. Si no es <code>ACCEPTED</code>, revisá el caso que falló, corregí y volvé a enviar.</li>
+</ol>
+<h4>Veredictos</h4>
+<ul>
+<li><code>AC</code>: aceptado.</li>
+<li><code>WA</code>: respuesta incorrecta. Revisá los casos borde y el formato de la salida.</li>
+<li><code>TLE</code>: tiempo excedido. Necesitás un algoritmo más eficiente (o probá con PyPy3).</li>
+<li><code>RE</code>: error en ejecución, por ejemplo un índice fuera de rango o leer mal la entrada.</li>
+</ul>
+<p>Enviar varias veces no tiene penalización. Equivocarse es parte del proceso.</p>`
+  },
+  "fuerza-bruta": {
+    titulo: "Fuerza bruta",
+    html: `
+<p>Resolver el problema de la forma <strong>más directa posible</strong>: probar todas las posibilidades, sin buscar ningún truco. Suele ser lenta, pero es fácil de escribir y de convencerse de que está bien.</p>
+<p>Ejemplo: ¿hay dos números de la lista que sumen <code>x</code>? Probá todos los pares.</p>
+<pre><code>def hay_par_lento(v, x):          # O(n²)
+    for i in range(len(v)):
+        for j in range(i + 1, len(v)):
+            if v[i] + v[j] == x:
+                return True
+    return False</code></pre>
+<h4>¿Para qué sirve si es lenta?</h4>
+<ul>
+<li><strong>Para destrabarte:</strong> tener algo correcto es mejor que la hoja en blanco. Mirando qué cálculos repite la versión lenta suele aparecer la idea rápida (por ejemplo, un diccionario o dos punteros, semana 8).</li>
+<li><strong>Puede alcanzar:</strong> si la entrada es chica (n ≤ 20 para O(2ⁿ), n ≤ 5 000 para O(n²); ver semana 7), la fuerza bruta ya es la solución.</li>
+<li><strong>Para probar la versión rápida:</strong> corré las dos con muchos casos chicos al azar y compará las salidas. Si alguna vez difieren, la rápida tiene un bug, y ese caso te muestra dónde.</li>
+</ul>
+<pre><code>import random
+for _ in range(1000):
+    v = [random.randint(-10, 10) for _ in range(random.randint(0, 8))]
+    x = random.randint(-20, 20)
+    if hay_par_lento(v, x) != hay_par_rapido(v, x):
+        print("¡Difieren!", v, x)
+        break</code></pre>
+<p>El backtracking (semana 12) es una fuerza bruta organizada: recorre todas las opciones, pero puede cortar ramas que ya no sirven.</p>`
+  }
 };

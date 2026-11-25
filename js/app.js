@@ -314,7 +314,7 @@ ${sec("03", "Cuando te trabás", `
 <ul class="modules simple">
 ${[["15 minutos sin código", "Casos chicos a mano, dibujos, tablas."],
    ["Repasá las preguntas de Pólya", "¿Usaste todos los datos? ¿Conocés un problema relacionado?"],
-   ["Fuerza bruta primero", "Aunque sea lenta, te da algo correcto para comparar."],
+   [`<button type="button" class="term" data-term="fuerza-bruta">Fuerza bruta</button> primero`, "Aunque sea lenta, te da algo correcto para comparar."],
    ["45–60 minutos sin avance", "Buscá una pista (no la solución): foro del juez, libro, lección."],
    ["Si leíste la solución", "Del <a href=\"#/soluciones\">banco de soluciones</a> o de otra fuente: cerrala, esperá un día y reescribila de cero. Anotalo para repasar."]]
   .map((x, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${x[0]}</span><span class="s">${x[1]}</span></span></div></li>`).join("")}
@@ -650,10 +650,28 @@ ${sec(LOCK.replace('class="arr"', 'class="arr" style="width:1.1em;height:1.1em;m
     }
   });
 
+  /* ---------- Glosario (popup) ---------- */
+  const dlg = $("#glosario");
+  function abrirTermino(clave) {
+    const g = GLOSARIO[clave];
+    if (!g) return;
+    $("#glosario-titulo").textContent = g.titulo;
+    $("#glosario-cuerpo").innerHTML = g.html;
+    dlg.showModal();
+    $("#glosario-cuerpo").scrollTop = 0;
+  }
+  dlg.addEventListener("click", (ev) => {
+    // Cerrar con la ✕ o al hacer clic fuera del cuadro
+    // (también al seguir un enlace interno, para que no quede abierto sobre la nueva página)
+    if (ev.target === dlg || ev.target.closest("#glosario-cerrar") || ev.target.closest('a[href^="#"]')) dlg.close();
+  });
+
   app.addEventListener("click", (ev) => {
     const el = ev.target.closest("button");
     if (!el) return;
-    if (el.dataset.del) {
+    if (el.dataset.term) {
+      abrirTermino(el.dataset.term);
+    } else if (el.dataset.del) {
       S.sesiones = S.sesiones.filter((x) => String(x.id) !== el.dataset.del); guardar(); render();
     } else if (el.id === "b-export") {
       const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
