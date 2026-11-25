@@ -8,7 +8,6 @@
   const ARR = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const FICHA = "descargas/ficha-polya.pdf";
   const DL = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5v6.5M3.2 5.4 6 8.2l2.8-2.8M2 10.5h8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const fichaLink = (txt = "Descargar ficha (PDF)") => `<a class="dl" href="${FICHA}" download="ficha-polya.pdf">${DL}<span>${txt}</span></a>`;
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado ---------- */
@@ -63,7 +62,7 @@
   function estado() {
     const cal = semanaCalendario();
     const sig = semanaSiguiente();
-    if (cal === null) return { txt: "Definí una fecha de inicio en Progreso para ver tu calendario.", cls: "" };
+    if (cal === null) return { txt: "Definí una fecha de inicio en «Mi progreso» para ver tu calendario.", cls: "" };
     if (cal === 0) return { txt: "El curso todavía no empezó según tu fecha de inicio.", cls: "" };
     if (sig === null) return { txt: "¡Curso completado! 🎉", cls: "accent" };
     const atraso = cal - sig;
@@ -114,8 +113,9 @@
       ["Configurá tu cuatrimestre", "Fecha de inicio y meta de horas en <a href=\"#/progreso\">Mi progreso</a>."],
       ["Leé la lección de la semana", "Ideas clave, ejemplos resueltos y código comentado."],
       ["Hacé las lecturas indicadas", "Capítulos concretos de Pólya, Joyanes y bibliografía complementaria."],
-      ["Resolvé problemas reales", `Con la ficha de Pólya y en jueces online, hasta obtener «Accepted». ${fichaLink()}`],
+      ["Resolvé problemas reales", "Con la ficha de Pólya y en jueces online, hasta obtener «Accepted»."],
       ["Marcá, registrá y reflexioná", "Actividades, horas, confianza y notas: tu avance queda a la vista."],
+      ["Compará con el banco de soluciones", "Después de intentarlo, revisá la resolución en <a href=\"#/soluciones\">Soluciones</a> (con contraseña)."],
       ["Evaluate", "Parcial en la semana 8; examen final y proyecto integrador en la 16."]
     ];
     return `
@@ -124,7 +124,7 @@
     <div class="eyebrow">Curso autodidacta · un cuatrimestre</div>
     <h1>Resolución de problemas y <em>algoritmos</em></h1>
     <p class="hero-lead">Comprender el problema. Diseñar un plan. Programarlo. Verificarlo.</p>
-    <p class="hero-copy">${saludo}Un plan guiado de 16 semanas para aprender a pensar problemas, expresarlos como algoritmos, programarlos en Python y analizar si son correctos y eficientes. Seis materias, lecturas concretas, práctica en jueces online, evaluaciones y un proyecto integrador.</p>
+    <p class="hero-copy">${saludo}Un plan guiado de 16 semanas para aprender a pensar problemas, expresarlos como algoritmos, programarlos en Python y analizar si son correctos y eficientes. Seis materias, lecturas concretas, práctica en jueces online, evaluaciones, un proyecto integrador y un banco de soluciones.</p>
     <div class="btn-row">
       ${sig ? `<a class="btn primary" href="#/semana/${sig}">${g.hechas ? "Continuar" : "Empezar"}: semana ${sig}${ARR}</a>` : ""}
       <a class="btn" href="#/plan">Ver el plan de estudio</a>
@@ -250,14 +250,14 @@ ${sec("02", "Lección", `<div class="lesson">${s.leccion}</div>`)}
 ${sec("03", "Lecturas", `<ul class="modules simple">${s.lecturas.map((l, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${esc(l.c)}</span><span class="s">${esc(libro(l.b).autor)} — <em>${esc(libro(l.b).titulo)}</em>${linkLibro(l.b)}</span></span></div></li>`).join("")}</ul>`)}
 ${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}${ARR}</a></li>`).join("")}</ul>`)}
 ${sec("05", "Actividades", `
-<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya. ${fichaLink()} · <a class="dl" href="#/soluciones/${m.id}/${n}">${LOCK}<span>Soluciones de esta semana</span></a></p>
+<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya. <a class="dl" href="#/soluciones/${m.id}/${n}">${LOCK}<span>Soluciones de esta semana</span></a></p>
 <ul class="tasks">
 ${s.tareas.map((t, i) => {
   const id = tid(n, i), done = !!S.tareas[id];
   return `<li class="task ${t.t}${done ? " done" : ""}">
     <input type="checkbox" id="${id}" data-task="${id}" ${done ? "checked" : ""}>
     <label for="${id}"><span class="kind">${TIPOS[t.t] || t.t}</span><span class="tx">${esc(t.x)}</span></label>
-    <span class="task-links">${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir${ARR}</a>` : ""}${/ficha/i.test(t.x) ? fichaLink("ficha PDF") : ""}</span>
+    <span class="task-links">${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir${ARR}</a>` : ""}</span>
   </li>`;
 }).join("")}
 </ul>`)}
@@ -290,7 +290,7 @@ ${sec("01", "Rutina semanal", `
 <tr><td>Martes</td><td>2 h</td><td>Videos/recursos y ejercicios de práctica (libro de problemas).</td></tr>
 <tr><td>Miércoles</td><td>2 h</td><td>Problemas de juez online (primeros 2–3).</td></tr>
 <tr><td>Jueves</td><td>2 h</td><td>Problemas restantes. Si te trabás, ver «Cuando te trabás».</td></tr>
-<tr><td>Vie / sáb</td><td>2–3 h</td><td>Reflexión, autoevaluación, notas y repaso. Proyecto (semanas 12–16).</td></tr>
+<tr><td>Vie / sáb</td><td>2–3 h</td><td>Reflexión, autoevaluación, comparar con el banco de soluciones, notas y repaso. Proyecto (semanas 12–16).</td></tr>
 </table>`)}
 ${sec("02", "Ficha de Pólya", `
 <p>Usala en <strong>cada</strong> problema. Descargá la versión imprimible (A4, 2 páginas) o copiá la versión de texto en tus notas de semana.</p>
@@ -316,7 +316,7 @@ ${[["15 minutos sin código", "Casos chicos a mano, dibujos, tablas."],
    ["Repasá las preguntas de Pólya", "¿Usaste todos los datos? ¿Conocés un problema relacionado?"],
    ["Fuerza bruta primero", "Aunque sea lenta, te da algo correcto para comparar."],
    ["45–60 minutos sin avance", "Buscá una pista (no la solución): foro del juez, libro, lección."],
-   ["Si leíste la solución", "Cerrala, esperá un día y reescribila de cero. Anotalo para repasar."]]
+   ["Si leíste la solución", "Del <a href=\"#/soluciones\">banco de soluciones</a> o de otra fuente: cerrala, esperá un día y reescribila de cero. Anotalo para repasar."]]
   .map((x, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${x[0]}</span><span class="s">${x[1]}</span></span></div></li>`).join("")}
 </ul>`)}
 ${sec("04", "Evaluación", `
@@ -328,7 +328,8 @@ ${sec("04", "Evaluación", `
 <tr><td>Examen final</td><td>25 %</td><td>Semana 16</td></tr>
 </table>
 <p class="pullquote">Aprobás con 60 % o más en cada instancia.</p>
-<p>Rúbrica para cada ejercicio de parcial o final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas — ${fichaLink("descargar ficha")}), <strong>claridad</strong> (2: nombres, funciones, invariantes comentados), <strong>casos borde</strong> (1).</p>`)}
+<p>Rúbrica para cada ejercicio de parcial o final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas), <strong>claridad</strong> (2: nombres, funciones, invariantes comentados), <strong>casos borde</strong> (1).</p>
+<p>Para autocorregir el parcial, el final y el proyecto, compará con las resoluciones del <a href="#/soluciones">banco de soluciones</a>.</p>`)}
 ${sec("05", "Proyecto integrador", `
 <ul>
 <li><strong>Resolvedor de laberintos:</strong> leer un laberinto de un archivo de texto, resolver con BFS/DFS, mostrar el camino y comparar.</li>
@@ -338,7 +339,7 @@ ${sec("05", "Proyecto integrador", `
 <li><strong>Comparador de ordenamientos:</strong> 6 algoritmos, gráfico de tiempos y análisis de casos (ordenado, inverso, aleatorio).</li>
 <li><strong>Planificador de materias:</strong> correlatividades como grafo dirigido; orden topológico y detección de ciclos.</li>
 </ul>
-<div class="callout"><strong>Entregable:</strong> repositorio con código, tests (asserts) y README con el problema, decisiones, ficha de Pólya (${fichaLink("descargar")}) y análisis de complejidad.</div>`)}
+<div class="callout"><strong>Entregable:</strong> repositorio con código, tests (asserts) y README con el problema, decisiones, ficha de Pólya y análisis de complejidad.</div>`)}
 ${sec("06", "Configuración técnica", `
 <ul>
 <li>Python 3.10+ y VS Code (o Thonny). Un repositorio git propio con una carpeta por semana.</li>

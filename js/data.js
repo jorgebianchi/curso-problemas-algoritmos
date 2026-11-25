@@ -637,7 +637,7 @@ s.count("a"); s.split(); "-".join(["a", "b"])</code></pre>
 <p>log₂ n niveles × O(n) por nivel = <strong>O(n log n)</strong>.</p>
 <h4>Ordenar para simplificar</h4>
 <p>Muchos problemas se vuelven fáciles con los datos ordenados: duplicados quedan contiguos, la mediana está en el medio, los extremos en las puntas. En la práctica usá <code>sorted(v)</code> o <code>v.sort(key=...)</code> (Timsort, O(n log n), estable).</p>
-<div class="callout"><strong>Primer parcial.</strong> Reservá un bloque de 3 horas sin interrupciones. Las consignas están en las tareas de esta semana. Corregilo con los criterios de la <a href="#/guia">Guía</a> y registrá la nota en tus notas de semana.</div>`,
+<div class="callout"><strong>Primer parcial.</strong> Reservá un bloque de 3 horas sin interrupciones. Las consignas están en las tareas de esta semana. Corregilo con los criterios de la <a href="#/guia">Guía</a> y las resoluciones del <a href="#/soluciones/m3/8">banco de soluciones</a>, y registrá la nota en tus notas de semana.</div>`,
     lecturas: [
       { b: "joyanes", c: "Cap. 10 «Ordenación, búsqueda e intercalación» — ordenación interna e intercalación" },
       { b: "joyanesProb", c: "Cap. 10.2–10.3 (selección, burbuja, inserción, Shell, ordenación rápida, intercalación)" },
@@ -656,7 +656,7 @@ s.count("a"); s.split(); "-".join(["a", "b"])</code></pre>
       { t: "problema", x: "CSES «Stick Lengths» (¿por qué la mediana?).", u: cses(1074) },
       { t: "problema", x: "CSES «Apartments» (ordenar + dos punteros).", u: cses(1084) },
       { t: "examen", x: "PARCIAL 1 (3 h, sin consultar): (1) ficha Pólya completa del problema CSES «Ferris Wheel» y solución AC; (2) pseudocódigo + traza de un algoritmo que diga si una lista es palíndromo; (3) probar por inducción Σ (2i−1) = n²; (4) dar la complejidad de 3 fragmentos de código de tu elección y justificarla; (5) implementar búsqueda binaria con invariante comentado.", u: cses(1090) },
-      { t: "reflexion", x: "Autocorrección del parcial con la rúbrica de la Guía. Anotá nota y qué repasar." }
+      { t: "reflexion", x: "Autocorrección del parcial con la rúbrica de la Guía y el banco de soluciones. Anotá nota y qué repasar." }
     ],
     autoeval: [
       "¿Explicás por qué merge sort es O(n log n)?",
