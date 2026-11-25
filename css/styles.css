@@ -77,7 +77,8 @@ header.top { border-bottom: 1px solid var(--line); background: var(--paper); pos
 .brand b span { color: var(--rust); }
 .brand small { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
 .nav-links { display: flex; align-items: center; gap: 24px; }
-.nav-links a { font-size: .9rem; text-decoration: none; color: var(--ink-2); }
+.nav-links a { font-size: .9rem; text-decoration: none; color: var(--ink-2); white-space: nowrap; }
+.brand { flex-shrink: 0; white-space: nowrap; }
 .nav-links a:hover, .nav-links a.active { color: var(--rust); }
 .nav-links a.active { text-decoration: underline; text-decoration-color: var(--rust); text-underline-offset: 6px; }
 .nav-links .nav-cta { border: 1px solid var(--ink); padding: 8px 18px; border-radius: 999px; color: var(--ink); }
@@ -274,6 +275,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--rust); outline: 
   .nav-links { gap: 16px; }
   .hero-grid { gap: 40px; }
   .sec { gap: 32px; }
+}
+/* Tablet: menú compacto en una sola fila */
+@media (min-width: 761px) and (max-width: 1024px) {
+  .nav { gap: 14px; }
+  .nav-links { gap: 14px; }
+  .nav-links a { font-size: .84rem; }
+  .nav-links .nav-cta { padding: 6px 12px; }
+  .nav-long { display: none; }
+  .brand b { font-size: .98rem; }
+  .brand small { display: none; }
 }
 /* Tablet vertical (iPad) */
 @media (max-width: 960px) {
