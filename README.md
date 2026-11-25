@@ -101,4 +101,4 @@ Los PDF de estos libros **no** se incluyen en el repositorio (derechos de autor)
 
 ## Créditos y licencia
 
-Desarrollo: [Jorge Bianchi](https://github.com/jorgebianchi). Contenido: CC BY-SA 4.0. Código: MIT.
+Desarrollo: [Jorge Bianchi](https://github.com/harikirtandas). Contenido: CC BY-SA 4.0. Código: MIT.
