@@ -105,6 +105,7 @@ footer { border-top: 1px solid var(--line); padding: 26px 0; color: var(--muted)
 .hero-copy { max-width: 680px; color: var(--muted); }
 .hero-stamp { border-top: 1px solid var(--ink); padding-top: 18px; font-size: 1.1rem; max-width: 360px; margin-left: auto; width: 100%; }
 .hero-stamp strong.lbl { display: block; color: var(--rust); font-size: .74rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 12px; }
+.hero-stamp .tag, .page-hero .tag { white-space: normal; line-height: 1.5; border-radius: 12px; }
 .hero-stamp .big-num { font-size: 3.4rem; letter-spacing: -.03em; line-height: 1; font-weight: 300; }
 .hero-stamp .big-num small { font-size: 1.2rem; color: var(--muted); letter-spacing: 0; font-weight: 400; }
 
@@ -288,10 +289,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--rust); outline: 
 }
 /* Tablet vertical (iPad) */
 @media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .hero-stamp { margin: 0; max-width: 420px; }
-  .section-head { grid-template-columns: 1fr; gap: 18px; }
-  .sec { grid-template-columns: 1fr; gap: 18px; padding: 40px 0; }
+  .section-head { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .sec { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 40px 0; }
   .sec > .sec-title { position: static; }
   .sec > .sec-body { max-width: none; }
   .hero::before { display: none; }
