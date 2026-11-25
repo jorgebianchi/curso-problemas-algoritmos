@@ -503,7 +503,7 @@ ${sec("04", "Respaldo", `
 ${sec(LOCK.replace('class="arr"', 'class="arr" style="width:1.1em;height:1.1em;margin:0"'), "Acceso con contraseña", `
 <form id="f-sol" class="panel" autocomplete="off" style="max-width:520px">
   <div class="field"><label for="sol-pass">Contraseña</label>
-    <input type="password" id="sol-pass" inputmode="numeric" required autofocus style="font:inherit;font-size:16px;width:100%;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink)"></div>
+    <input type="password" id="sol-pass" required autofocus style="font:inherit;font-size:16px;width:100%;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink)"></div>
   ${solError ? `<p class="sol-err" role="alert">${esc(solError)}</p>` : ""}
   <button class="btn primary" type="submit" id="sol-btn">Desbloquear</button>
 </form>
