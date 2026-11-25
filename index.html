@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resolución de problemas y algoritmos</title>
+  <meta name="description" content="Curso autodidacta de un cuatrimestre sobre resolución de problemas y algoritmos, con plan guiado y seguimiento del avance.">
+  <script>
+    // Evita el parpadeo de tema al cargar
+    (function () { var t = localStorage.getItem("rpa-tema") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); document.documentElement.dataset.theme = t; })();
+  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232f5d50'/><text x='16' y='22' font-family='monospace' font-size='16' fill='white' text-anchor='middle'>{}</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#/">Problemas &amp; Algoritmos <span>· curso autodidacta</span></a>
+      <nav class="main" aria-label="Principal">
+        <a href="#/" data-nav="inicio">Inicio</a>
+        <a href="#/plan" data-nav="plan">Plan</a>
+        <a href="#/guia" data-nav="guia">Guía</a>
+        <a href="#/bibliografia" data-nav="bibliografia">Bibliografía</a>
+        <a href="#/progreso" data-nav="progreso">Progreso</a>
+      </nav>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="Cambiar tema"></button>
+    </div>
+  </header>
+  <main class="wrap" id="app" tabindex="-1"></main>
+  <footer>
+    <div class="wrap">Inspirado en <a href="https://ossu.dev/" target="_blank" rel="noopener">OSSU</a>. Contenido libre (CC BY-SA 4.0). El progreso se guarda sólo en tu navegador.</div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="wrap">Este curso necesita JavaScript para mostrar el contenido y guardar tu progreso.</p></noscript>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
