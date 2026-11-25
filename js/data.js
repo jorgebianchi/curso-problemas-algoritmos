@@ -244,7 +244,7 @@ const SEMANAS = [
 <div class="callout"><strong>Hábito clave:</strong> para cada problema escribí una ficha con las 4 fases (plantilla en la <a href="#/guia">Guía</a>). Cuesta al principio; es lo que más acelera el aprendizaje.</div>
 <h4>Ejemplo resuelto</h4>
 <p><em>¿Cuántos apretones de mano hay si 10 personas se saludan todas entre sí una vez?</em></p>
-<p><strong>Comprender:</strong> incógnita = cantidad de pares distintos. <strong>Plan:</strong> casos chicos: 2 personas → 1, 3 → 3, 4 → 6. Patrón: al agregar la persona n saluda a las n−1 anteriores, así que el total es 1+2+…+(n−1). <strong>Ejecutar:</strong> 1+…+9 = 45. <strong>Examinar:</strong> otra vía: cada una de las 10 personas da 9 apretones, y cada apretón se contó 2 veces: 10·9/2 = 45 ✔. Generaliza a n(n−1)/2.</p>`,
+<p><strong>Comprender:</strong> incógnita = cantidad de pares distintos. <strong>Plan:</strong> casos chicos: 2 personas → 1, 3 → 3, 4 → 6. Patrón: al agregar la persona n saluda a las n−1 anteriores, así que el total es 1+2+…+(n−1). <strong>Ejecutar:</strong> 1+…+9 = 45. <strong>Examinar:</strong> otra vía: cada una de las 10 personas da 9 apretones, y cada apretón se contó 2 veces: 10·9/2 = 45 ✓. Generaliza a n(n−1)/2.</p>`,
     lecturas: [
       { b: "polya", c: "Prefacios y Parte I «En el salón de clases» (secciones 1–20)" },
       { b: "polya", c: "Parte II «Cómo resolver un problema» (el diálogo con la lista de preguntas)" },
@@ -507,7 +507,7 @@ s.count("a"); s.split(); "-".join(["a", "b"])</code></pre>
     leccion: `
 <h4>Inducción</h4>
 <p>Para probar que P(n) vale para todo n ≥ 1: (1) <strong>base</strong>: P(1) es verdadera; (2) <strong>paso</strong>: si P(k) es verdadera, entonces P(k+1) también.</p>
-<p>Ejemplo: 1 + 2 + … + n = n(n+1)/2. Base: 1 = 1·2/2 ✔. Paso: si vale para k, entonces 1+…+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2 ✔.</p>
+<p>Ejemplo: 1 + 2 + … + n = n(n+1)/2. Base: 1 = 1·2/2 ✓. Paso: si vale para k, entonces 1+…+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2 ✓.</p>
 <h4>Invariantes de ciclo</h4>
 <p>Un invariante es una afirmación que es verdadera antes de cada vuelta. Si vale al inicio, se conserva en cada vuelta y, junto con la condición de salida, implica lo que querés: el ciclo es correcto.</p>
 <pre><code>def maximo(v):

@@ -137,6 +137,7 @@ footer { border-top: 1px solid var(--line); padding: 26px 0; color: var(--muted)
 .sec > .sec-body { min-width: 0; max-width: 780px; }
 
 /* ===== Components ===== */
+.arr { width: .72em; height: .72em; display: inline-block; vertical-align: baseline; margin-left: .3em; flex-shrink: 0; }
 .lead { font-size: 1.15rem; color: var(--muted); }
 .muted { color: var(--muted); }
 .faint { color: var(--faint); font-size: .86rem; }

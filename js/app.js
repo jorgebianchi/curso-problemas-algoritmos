@@ -5,6 +5,7 @@
   const KEY = "rpa-progreso-v1";
   const THEME_KEY = "rpa-tema";
   const $ = (s, r = document) => r.querySelector(s);
+  const ARR = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado ---------- */
@@ -122,7 +123,7 @@
     <p class="hero-lead">Comprender el problema. Diseñar un plan. Programarlo. Verificarlo.</p>
     <p class="hero-copy">${saludo}Un plan guiado de 16 semanas para aprender a pensar problemas, expresarlos como algoritmos, programarlos en Python y analizar si son correctos y eficientes. Seis materias, lecturas concretas, práctica en jueces online, evaluaciones y un proyecto integrador.</p>
     <div class="btn-row">
-      ${sig ? `<a class="btn primary" href="#/semana/${sig}">${g.hechas ? "Continuar" : "Empezar"}: semana ${sig} ↗</a>` : ""}
+      ${sig ? `<a class="btn primary" href="#/semana/${sig}">${g.hechas ? "Continuar" : "Empezar"}: semana ${sig}${ARR}</a>` : ""}
       <a class="btn" href="#/plan">Ver el plan de estudio</a>
     </div>
   </div>
@@ -184,7 +185,7 @@
   <div class="eyebrow">${sig ? `Semana ${sig}` : "Curso completo"}</div>
   <h2>Todo problema empieza con <em>una pregunta</em>.</h2>
   <p>«¿Cuál es la incógnita? ¿Cuáles son los datos? ¿Cuál es la condición?» — G. Pólya</p>
-  ${sig ? `<a class="btn primary" href="#/semana/${sig}">Ir a la semana ${sig} ↗</a>` : `<a class="btn primary" href="#/guia">¿Y ahora qué? ↗</a>`}
+  ${sig ? `<a class="btn primary" href="#/semana/${sig}">Ir a la semana ${sig}${ARR}</a>` : `<a class="btn primary" href="#/guia">¿Y ahora qué?${ARR}</a>`}
 </div></section>`;
   }
 
@@ -227,7 +228,7 @@ ${sec("03", "Bibliografía", libros.map((b) => `<div class="biblio-item"><div cl
   function linkLibro(b) {
     const L = libro(b);
     const links = [];
-    if (L.url) links.push(`<a href="${L.url}" target="_blank" rel="noopener">online ↗</a>`);
+    if (L.url) links.push(`<a href="${L.url}" target="_blank" rel="noopener">online${ARR}</a>`);
     return links.length ? ` <span class="faint">· ${links.join(" · ")}</span>` : "";
   }
 
@@ -244,7 +245,7 @@ ${sec("03", "Bibliografía", libros.map((b) => `<div class="biblio-item"><div cl
 ${sec("01", "Objetivos", `<ul>${s.objetivos.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`)}
 ${sec("02", "Lección", `<div class="lesson">${s.leccion}</div>`)}
 ${sec("03", "Lecturas", `<ul class="modules simple">${s.lecturas.map((l, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${esc(l.c)}</span><span class="s">${esc(libro(l.b).autor)} — <em>${esc(libro(l.b).titulo)}</em>${linkLibro(l.b)}</span></span></div></li>`).join("")}</ul>`)}
-${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></li>`).join("")}</ul>`)}
+${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}${ARR}</a></li>`).join("")}</ul>`)}
 ${sec("05", "Actividades", `
 <p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya.</p>
 <ul class="tasks">
@@ -253,7 +254,7 @@ ${s.tareas.map((t, i) => {
   return `<li class="task ${t.t}${done ? " done" : ""}">
     <input type="checkbox" id="${id}" data-task="${id}" ${done ? "checked" : ""}>
     <label for="${id}"><span class="kind">${TIPOS[t.t] || t.t}</span><span class="tx">${esc(t.x)}</span></label>
-    ${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir ↗</a>` : ""}
+    ${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir${ARR}</a>` : ""}
   </li>`;
 }).join("")}
 </ul>`)}
@@ -358,10 +359,10 @@ ${sec("07", "¿Y ahora qué?", `
   function vBiblio() {
     const item = (L) => `<div class="biblio-item"><div class="ti">${esc(L.titulo)}</div>
       <div class="meta">${esc(L.autor)} · ${esc(L.editorial)} · ${esc(L.anio)} · <span class="tag">${L.idioma === "es" ? "español" : "inglés"}</span>
-      ${L.url ? ` · <a href="${L.url}" target="_blank" rel="noopener">acceso libre ↗</a>` : ""}</div>
+      ${L.url ? ` · <a href="${L.url}" target="_blank" rel="noopener">acceso libre${ARR}</a>` : ""}</div>
       <div class="muted" style="font-size:.94rem">${esc(L.nota)}</div></div>`;
     const todos = Object.values(BIBLIO);
-    const link = (x) => `<div class="biblio-item"><div class="ti"><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></div><div class="muted" style="font-size:.94rem">${esc(x.d)}</div></div>`;
+    const link = (x) => `<div class="biblio-item"><div class="ti"><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}${ARR}</a></div><div class="muted" style="font-size:.94rem">${esc(x.d)}</div></div>`;
     return pageHero("Material", "Bibliografía <em>y recursos</em>",
       "Los tres libros base cubren el núcleo. El resto amplía, ofrece otro enfoque o es de acceso libre.") + `
 <div class="wrap">
