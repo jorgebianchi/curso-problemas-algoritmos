@@ -87,97 +87,149 @@
   const libro = (id) => BIBLIO[id];
 
   /* ---------- Vistas ---------- */
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const sec = (num, titulo, cuerpo, extra = "") => `
+<section class="sec"${extra}>
+  <div class="sec-title"><span class="n">${num}</span><h2>${titulo}</h2></div>
+  <div class="sec-body">${cuerpo}</div>
+</section>`;
+  const pageHero = (eyebrow, titulo, lead = "", extra = "") => `
+<div class="page-hero"><div class="wrap">
+  <div class="eyebrow">${eyebrow}</div>
+  <h1>${titulo}</h1>
+  ${lead ? `<p class="hero-lead">${lead}</p>` : ""}
+  ${extra}
+</div></div>`;
+  const totalTareas = () => SEMANAS.reduce((a, s) => a + s.tareas.length, 0);
+
   function vInicio() {
     const g = progGlobal(), e = estado(), sig = semanaSiguiente();
-    const saludo = S.config.nombre ? `Hola, ${esc(S.config.nombre)}.` : "";
+    const saludo = S.config.nombre ? `Hola, ${esc(S.config.nombre)}. ` : "";
+    const temas = ["Método de Pólya", "Pseudocódigo", "Python", "Invariantes", "Complejidad", "Búsqueda binaria", "Ordenamiento", "Pilas y colas", "Hashing", "Árboles", "Heaps", "Recursión", "Backtracking", "Voraces", "Programación dinámica", "BFS / DFS", "Dijkstra", "Kruskal"];
+    const pasos = [
+      ["Configurá tu cuatrimestre", "Fecha de inicio y meta de horas en <a href=\"#/progreso\">Mi progreso</a>."],
+      ["Leé la lección de la semana", "Ideas clave, ejemplos resueltos y código comentado."],
+      ["Hacé las lecturas indicadas", "Capítulos concretos de Pólya, Joyanes y bibliografía complementaria."],
+      ["Resolvé problemas reales", "Con la ficha de Pólya y en jueces online, hasta obtener «Accepted»."],
+      ["Marcá, registrá y reflexioná", "Actividades, horas, confianza y notas: tu avance queda a la vista."],
+      ["Evaluate", "Parcial en la semana 8; examen final y proyecto integrador en la 16."]
+    ];
     return `
-<div class="eyebrow">Curso autodidacta · 1 cuatrimestre · 16 semanas</div>
-<h1>Resolución de problemas y algoritmos</h1>
-<p class="lead">${saludo} Un plan guiado para aprender a pensar problemas, expresarlos como algoritmos, programarlos en Python y analizarlos. Seis materias, lecturas concretas, práctica en jueces online, evaluaciones y un proyecto integrador.</p>
-
-<div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap">
-    <strong>Tu avance</strong><span class="pct">${g.hechas} / ${g.total} actividades · ${g.pct}%</span>
+<section class="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow">Curso autodidacta · un cuatrimestre</div>
+    <h1>Resolución de problemas y <em>algoritmos</em></h1>
+    <p class="hero-lead">Comprender el problema. Diseñar un plan. Programarlo. Verificarlo.</p>
+    <p class="hero-copy">${saludo}Un plan guiado de 16 semanas para aprender a pensar problemas, expresarlos como algoritmos, programarlos en Python y analizar si son correctos y eficientes. Seis materias, lecturas concretas, práctica en jueces online, evaluaciones y un proyecto integrador.</p>
+    <div class="btn-row">
+      ${sig ? `<a class="btn primary" href="#/semana/${sig}">${g.hechas ? "Continuar" : "Empezar"}: semana ${sig} ↗</a>` : ""}
+      <a class="btn" href="#/plan">Ver el plan de estudio</a>
+    </div>
   </div>
-  <div style="margin:.6rem 0 .8rem">${bar(g.pct, true)}</div>
-  <span class="tag ${e.cls}">${e.txt}</span>
-  <div class="btn-row">
-    ${sig ? `<a class="btn primary" href="#/semana/${sig}">Continuar: semana ${sig} →</a>` : ""}
-    <a class="btn" href="#/plan">Ver plan</a>
-    <a class="btn" href="#/guia">Cómo estudiar</a>
+  <div class="hero-stamp">
+    <strong class="lbl">Tu avance</strong>
+    <div class="big-num">${g.pct}<small> %</small></div>
+    <div style="margin:12px 0 10px">${bar(g.pct, true)}</div>
+    <div class="pct">${g.hechas} de ${g.total} actividades</div>
+    <p style="margin:14px 0 0"><span class="tag ${e.cls}">${e.txt}</span></p>
   </div>
-</div>
+</div></section>
 
-<h2>Materias</h2>
-<ul class="list-plain">
-${MATERIAS.map((m) => {
-  const p = progMateria(m);
-  return `<li><a class="row-link" href="#/materia/${m.id}">
-    <span class="n">${String(m.n).padStart(2, "0")}</span>
-    <span><span class="t">${esc(m.nombre)}</span><br><span class="s">Semanas ${m.semanas[0]}–${m.semanas[m.semanas.length - 1]}</span></span>
-    <span>${bar(p.pct)}<span class="pct">${p.pct}%</span></span></a></li>`;
-}).join("")}
-</ul>
+<div class="band" aria-hidden="true"><div class="track">${[...temas, ...temas].map((t) => `<span>${t}</span>`).join("")}</div></div>
 
-<h2>Cómo funciona</h2>
-<ol>
-  <li><strong>Configurá</strong> tu fecha de inicio y meta de horas en <a href="#/progreso">Progreso</a>.</li>
-  <li><strong>Cada semana</strong> leé la lección, hacé las lecturas indicadas y marcá las actividades a medida que las completás.</li>
-  <li><strong>Resolvé problemas</strong> con la ficha de Pólya y envialos a un juez online hasta obtener «Accepted».</li>
-  <li><strong>Registrá</strong> tus sesiones de estudio, tu nivel de confianza y tus notas.</li>
-  <li><strong>Evaluate</strong> en la semana 8 (parcial) y la 16 (final + proyecto).</li>
-</ol>
-<p class="faint">Tu avance se guarda en este navegador. Exportalo periódicamente desde Progreso para tener una copia.</p>`;
+<section class="section"><div class="wrap">
+  <div class="section-head">
+    <div><div class="eyebrow">La propuesta</div><h2>Aprender a pensar antes de programar</h2></div>
+    <div>
+      <p class="section-intro">Un algoritmo no se memoriza: se descubre. El curso combina el método heurístico de Pólya con las técnicas clásicas de la algoritmia, y te hace practicar con problemas reales desde la tercera semana.</p>
+      <div class="facts">
+        <div class="fact"><strong>16 semanas</strong><span>~10–12 h semanales</span></div>
+        <div class="fact"><strong>6</strong><span>materias encadenadas</span></div>
+        <div class="fact"><strong>${totalTareas()}</strong><span>actividades guiadas</span></div>
+        <div class="fact"><strong>Proyecto</strong><span>integrador final</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="section" style="padding-top:0;border-top:0"><div class="wrap">
+  <div class="section-head">
+    <div><div class="eyebrow">Formación articulada</div><h2>Cómo se organiza el curso</h2></div>
+    <p class="section-intro">Cada materia se apoya en la anterior. Entrá a cualquiera para ver sus objetivos, semanas y bibliografía.</p>
+  </div>
+  <div class="nuclei">
+  ${MATERIAS.map((m) => {
+    const p = progMateria(m);
+    return `<a class="nucleus${p.pct === 100 ? " done" : ""}" href="#/materia/${m.id}">
+      <span class="num">${pad2(m.n)}</span>
+      <h3>${esc(m.nombre)}</h3>
+      <p>${esc(m.desc)}</p>
+      <div class="foot"><div class="row"><span>Semanas ${m.semanas[0]}–${m.semanas[m.semanas.length - 1]}</span><span>${p.pct}%</span></div>${bar(p.pct)}</div>
+    </a>`;
+  }).join("")}
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <div class="section-head">
+    <div><div class="eyebrow">Primer paso</div><h2>Cómo funciona</h2></div>
+    <div>
+      <ul class="modules simple">${pasos.map((p, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${p[0]}</span><span class="s">${p[1]}</span></span></div></li>`).join("")}</ul>
+      <p class="faint">Tu avance se guarda en este navegador. Exportalo periódicamente desde «Mi progreso» para tener una copia.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+  <div class="eyebrow">${sig ? `Semana ${sig}` : "Curso completo"}</div>
+  <h2>Todo problema empieza con <em>una pregunta</em>.</h2>
+  <p>«¿Cuál es la incógnita? ¿Cuáles son los datos? ¿Cuál es la condición?» — G. Pólya</p>
+  ${sig ? `<a class="btn primary" href="#/semana/${sig}">Ir a la semana ${sig} ↗</a>` : `<a class="btn primary" href="#/guia">¿Y ahora qué? ↗</a>`}
+</div></section>`;
+  }
+
+  function filaSemana(s, cal) {
+    const ps = progSemana(s), r = rangoSemana(s.n);
+    const hito = s.tareas.some((t) => t.t === "examen") ? ' <span class="tag warn">evaluación</span>' : s.tareas.some((t) => t.t === "proyecto") ? ' <span class="tag accent">proyecto</span>' : "";
+    return `<li><a class="mod${cal === s.n ? " current" : ""}" href="#/semana/${s.n}">
+      <span class="n">${pad2(s.n)}</span>
+      <span><span class="t">${esc(s.titulo)}${hito}</span><span class="s">${r ? fmtFecha(r[0]) + " – " + fmtFecha(r[1]) + " · " : ""}~${s.horas} h · ${ps.hechas}/${ps.total} actividades</span></span>
+      <span>${bar(ps.pct)}<span class="pct">${ps.pct}%</span></span></a></li>`;
   }
 
   function vPlan() {
     const cal = semanaCalendario();
-    return `
-<div class="eyebrow">Cronograma</div>
-<h1>Plan de estudio</h1>
-<p class="lead">16 semanas de ~10–12 horas. Si tenés menos tiempo, estirá el plan a 24 semanas: lo importante es no saltear la práctica.</p>
+    return pageHero("Cronograma", "Plan de <em>estudio</em>",
+      "16 semanas de ~10–12 horas. Si tenés menos tiempo, estirá el plan a 24 semanas: lo importante es no saltear la práctica.") + `
+<div class="wrap">
 ${MATERIAS.map((m) => {
   const p = progMateria(m);
-  return `
-<div class="materia-head"><h2><a href="#/materia/${m.id}" style="color:inherit;text-decoration:none">${m.n}. ${esc(m.nombre)}</a></h2><span class="pct">${p.pct}%</span></div>
-<ul class="list-plain">
-${m.semanas.map(semana).map((s) => {
-  const ps = progSemana(s), r = rangoSemana(s.n);
-  const hito = s.tareas.some((t) => t.t === "examen") ? ' <span class="tag warn">evaluación</span>' : s.tareas.some((t) => t.t === "proyecto") ? ' <span class="tag">proyecto</span>' : "";
-  return `<li><a class="row-link${cal === s.n ? " current" : ""}" href="#/semana/${s.n}">
-    <span class="n">S${String(s.n).padStart(2, "0")}</span>
-    <span><span class="t">${esc(s.titulo)}</span>${hito}<br><span class="s">${r ? fmtFecha(r[0]) + " – " + fmtFecha(r[1]) + " · " : ""}~${s.horas} h · ${ps.hechas}/${ps.total}</span></span>
-    <span>${bar(ps.pct)}<span class="pct">${ps.pct}%</span></span></a></li>`;
+  return sec(`Materia ${pad2(m.n)} · ${p.pct}%`, `<a href="#/materia/${m.id}" style="text-decoration:none">${esc(m.nombre)}</a>`,
+    `<ul class="modules">${m.semanas.map(semana).map((s) => filaSemana(s, cal)).join("")}</ul>`);
 }).join("")}
-</ul>`;
-}).join("")}`;
+</div>`;
   }
 
   function vMateria(id) {
     const m = materia(id);
     if (!m) return vNoEncontrado();
-    const p = progMateria(m);
-    return `
-<div class="eyebrow"><a href="#/plan">Plan</a> · Materia ${m.n}</div>
-<h1>${esc(m.nombre)}</h1>
-<p class="lead">${esc(m.desc)}</p>
-<div style="margin:1rem 0">${bar(p.pct, true)}<span class="pct">${p.hechas}/${p.total} actividades · ${p.pct}%</span></div>
-<h2>Objetivos</h2>
-<ul>${m.objetivos.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>
-<h2>Semanas</h2>
-<ul class="list-plain">
-${m.semanas.map(semana).map((s) => { const ps = progSemana(s); return `<li><a class="row-link" href="#/semana/${s.n}"><span class="n">S${String(s.n).padStart(2, "0")}</span><span class="t">${esc(s.titulo)}</span><span>${bar(ps.pct)}<span class="pct">${ps.pct}%</span></span></a></li>`; }).join("")}
-</ul>
-<h2>Bibliografía de la materia</h2>
-<ul>${[...new Set(m.semanas.flatMap((n) => semana(n).lecturas.map((l) => l.b)))].map((b) => `<li>${esc(libro(b).autor)} — <em>${esc(libro(b).titulo)}</em></li>`).join("")}</ul>`;
+    const p = progMateria(m), cal = semanaCalendario();
+    const libros = [...new Set(m.semanas.flatMap((n) => semana(n).lecturas.map((l) => l.b)))];
+    return pageHero(`<a href="#/plan">Plan de estudio</a> · Materia ${pad2(m.n)}`, esc(m.nombre), esc(m.desc),
+      `<div style="max-width:520px">${bar(p.pct, true)}<span class="pct">${p.hechas}/${p.total} actividades · ${p.pct}%</span></div>`) + `
+<div class="wrap">
+${sec("01", "Objetivos", `<ul>${m.objetivos.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`)}
+${sec("02", "Semanas", `<ul class="modules">${m.semanas.map(semana).map((s) => filaSemana(s, cal)).join("")}</ul>`)}
+${sec("03", "Bibliografía", libros.map((b) => `<div class="biblio-item"><div class="ti">${esc(libro(b).titulo)}</div><div class="meta">${esc(libro(b).autor)}${linkLibro(b)}</div></div>`).join(""))}
+</div>`;
   }
 
   function linkLibro(b) {
     const L = libro(b);
     const links = [];
-    if (L.url) links.push(`<a href="${L.url}" target="_blank" rel="noopener">online</a>`);
+    if (L.url) links.push(`<a href="${L.url}" target="_blank" rel="noopener">online ↗</a>`);
     if (L.local) links.push(`<a href="${encodeURI(L.local)}" target="_blank" rel="noopener" title="Disponible sólo si tenés el PDF en la carpeta del curso">PDF local</a>`);
-    return links.length ? ` <span class="faint">(${links.join(" · ")})</span>` : "";
+    return links.length ? ` <span class="faint">· ${links.join(" · ")}</span>` : "";
   }
 
   function vSemana(n) {
@@ -186,72 +238,59 @@ ${m.semanas.map(semana).map((s) => { const ps = progSemana(s); return `<li><a cl
     const m = materia(s.m), p = progSemana(s), r = rangoSemana(n);
     const conf = S.confianza[n] || 0;
     const prev = semana(n - 1), next = semana(n + 1);
-    return `
-<div class="eyebrow"><a href="#/materia/${m.id}">Materia ${m.n} · ${esc(m.nombre)}</a></div>
-<h1>Semana ${n}: ${esc(s.titulo)}</h1>
-<p class="faint">${r ? fmtFecha(r[0]) + " – " + fmtFecha(r[1]) + " · " : ""}Dedicación estimada: ~${s.horas} horas</p>
-<div style="margin:1rem 0 0">${bar(p.pct, true)}<span class="pct" id="wk-pct">${p.hechas}/${p.total} actividades · ${p.pct}%</span></div>
-
-<h2>Objetivos</h2>
-<ul>${s.objetivos.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>
-
-<h2>Lección</h2>
-<div class="lesson">${s.leccion}</div>
-
-<h2>Lecturas</h2>
-<ul>${s.lecturas.map((l) => `<li><strong>${esc(libro(l.b).autor)}</strong>, <em>${esc(libro(l.b).titulo)}</em>: ${esc(l.c)}${linkLibro(l.b)}</li>`).join("")}</ul>
-
-<h2>Recursos complementarios</h2>
-<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}</a></li>`).join("")}</ul>
-
-<h2>Actividades</h2>
-<p class="faint">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya.</p>
+    const meta = `<p class="faint" style="margin:0 0 14px">${r ? fmtFecha(r[0]) + " – " + fmtFecha(r[1]) + " · " : ""}Dedicación estimada: ~${s.horas} horas</p>
+      <div style="max-width:520px">${bar(p.pct, true)}<span class="pct" id="wk-pct">${p.hechas}/${p.total} actividades · ${p.pct}%</span></div>`;
+    return pageHero(`<a href="#/materia/${m.id}">Materia ${pad2(m.n)} · ${esc(m.nombre)}</a>`, `<em>Semana ${n}.</em> ${esc(s.titulo)}`, "", meta) + `
+<div class="wrap">
+${sec("01", "Objetivos", `<ul>${s.objetivos.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`)}
+${sec("02", "Lección", `<div class="lesson">${s.leccion}</div>`)}
+${sec("03", "Lecturas", `<ul class="modules simple">${s.lecturas.map((l, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${esc(l.c)}</span><span class="s">${esc(libro(l.b).autor)} — <em>${esc(libro(l.b).titulo)}</em>${linkLibro(l.b)}</span></span></div></li>`).join("")}</ul>`)}
+${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></li>`).join("")}</ul>`)}
+${sec("05", "Actividades", `
+<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya.</p>
 <ul class="tasks">
 ${s.tareas.map((t, i) => {
   const id = tid(n, i), done = !!S.tareas[id];
-  return `<li class="task${done ? " done" : ""}">
+  return `<li class="task ${t.t}${done ? " done" : ""}">
     <input type="checkbox" id="${id}" data-task="${id}" ${done ? "checked" : ""}>
     <label for="${id}"><span class="kind">${TIPOS[t.t] || t.t}</span><span class="tx">${esc(t.x)}</span></label>
     ${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir ↗</a>` : ""}
   </li>`;
 }).join("")}
-</ul>
-
-<h2>Autoevaluación</h2>
+</ul>`)}
+${sec("06", "Autoevaluación", `
 <ul>${s.autoeval.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>
-<p class="muted" style="margin-bottom:.4rem">¿Qué tan seguro/a te sentís con los temas de esta semana?</p>
-<div class="scale" role="radiogroup">
+<p class="muted" style="margin:1.4rem 0 .6rem">¿Qué tan seguro/a te sentís con los temas de esta semana?</p>
+<div class="scale" role="radiogroup" aria-label="Nivel de confianza">
 ${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="conf" value="${v}" ${conf === v ? "checked" : ""}><span>${v} · ${["nada", "poco", "regular", "bastante", "muy"][v - 1]}</span></label>`).join("")}
 </div>
-<p class="faint" style="margin-top:.5rem">Si marcás 1 o 2, repasá antes de avanzar: releé la lección y rehacé un problema sin mirar.</p>
-
-<h2>Notas de la semana</h2>
+<p class="faint" style="margin-top:.7rem">Si marcás 1 o 2, repasá antes de avanzar: releé la lección y rehacé un problema sin mirar.</p>`)}
+${sec("07", "Notas", `
 <textarea id="notas" placeholder="Dudas, ideas, errores frecuentes, fichas de Pólya, notas de parcial…">${esc(S.notas[n] || "")}</textarea>
-<p class="faint" id="notas-ok">Se guarda automáticamente.</p>
-
-<div class="pager">
+<p class="faint" id="notas-ok">Se guarda automáticamente.</p>`)}
+<nav class="pager" aria-label="Semanas">
   ${prev ? `<a href="#/semana/${prev.n}">← Semana ${prev.n}<strong>${esc(prev.titulo)}</strong></a>` : "<span></span>"}
-  ${next ? `<a href="#/semana/${next.n}" style="text-align:right">Semana ${next.n} →<strong>${esc(next.titulo)}</strong></a>` : "<span></span>"}
+  ${next ? `<a href="#/semana/${next.n}">Semana ${next.n} →<strong>${esc(next.titulo)}</strong></a>` : `<a href="#/progreso">Final →<strong>Ver mi progreso</strong></a>`}
+</nav>
 </div>`;
   }
 
   function vGuia() {
-    return `
-<div class="eyebrow">Metodología</div>
-<h1>Cómo estudiar este curso</h1>
-<p class="lead">Aprender algoritmos es como aprender un deporte: se lee para entender, pero se aprende practicando. Esta guía te dice cómo organizarte, cómo encarar cada problema y cómo evaluarte.</p>
-
-<h2>Rutina semanal sugerida (~11 h)</h2>
+    return pageHero("Metodología", "Cómo estudiar <em>este curso</em>",
+      "Aprender algoritmos es como aprender un deporte: se lee para entender, pero se aprende practicando. Cómo organizarte, cómo encarar cada problema y cómo evaluarte.") + `
+<div class="wrap">
+${sec("01", "Rutina semanal", `
+<p>Unas 11 horas, repartidas en bloques cortos y frecuentes (rinden más que una maratón el domingo).</p>
 <table>
 <tr><th>Bloque</th><th>Tiempo</th><th>Qué hacer</th></tr>
 <tr><td>Lunes</td><td>2 h</td><td>Lección del sitio + lectura principal. Resumen a mano.</td></tr>
 <tr><td>Martes</td><td>2 h</td><td>Videos/recursos y ejercicios de práctica (libro de problemas).</td></tr>
 <tr><td>Miércoles</td><td>2 h</td><td>Problemas de juez online (primeros 2–3).</td></tr>
 <tr><td>Jueves</td><td>2 h</td><td>Problemas restantes. Si te trabás, ver «Cuando te trabás».</td></tr>
-<tr><td>Viernes/sábado</td><td>2–3 h</td><td>Reflexión, autoevaluación, notas, repaso de lo que falló. Proyecto (semanas 12–16).</td></tr>
-</table>
-
-<h2>Ficha de Pólya (usala en cada problema)</h2>
+<tr><td>Vie / sáb</td><td>2–3 h</td><td>Reflexión, autoevaluación, notas y repaso. Proyecto (semanas 12–16).</td></tr>
+</table>`)}
+${sec("02", "Ficha de Pólya", `
+<p>Usala en <strong>cada</strong> problema. Pegala en tus notas de semana o en un archivo por problema.</p>
 <pre><code>PROBLEMA: (nombre + link)
 1. COMPRENDER
    - Incógnita / qué devolver:
@@ -266,18 +305,17 @@ ${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="conf" value="${v}
    - Pseudocódigo → código. Veredictos del juez y qué corregí:
 4. REVISIÓN
    - ¿Por qué es correcto? (invariante / argumento):
-   - ¿Otra forma de resolverlo? ¿Qué aprendí que pueda reutilizar?</code></pre>
-
-<h2>Cuando te trabás</h2>
-<ol>
-<li><strong>15 minutos</strong> pensando sin código: casos chicos a mano, dibujos.</li>
-<li><strong>Repasá la lista de preguntas de Pólya</strong>: ¿usaste todos los datos? ¿conocés un problema relacionado?</li>
-<li><strong>Fuerza bruta primero</strong>: aunque sea lenta, te da algo correcto para comparar.</li>
-<li><strong>45–60 minutos</strong> sin avance: buscá una pista (no la solución) — en el foro del juez, en el libro o en la lección.</li>
-<li>Si leíste la solución: cerrala, esperá un día y <strong>reescribila de cero</strong>. Marcalo en tus notas para repasar.</li>
-</ol>
-
-<h2>Evaluación y aprobación</h2>
+   - ¿Otra forma de resolverlo? ¿Qué aprendí que pueda reutilizar?</code></pre>`)}
+${sec("03", "Cuando te trabás", `
+<ul class="modules simple">
+${[["15 minutos sin código", "Casos chicos a mano, dibujos, tablas."],
+   ["Repasá las preguntas de Pólya", "¿Usaste todos los datos? ¿Conocés un problema relacionado?"],
+   ["Fuerza bruta primero", "Aunque sea lenta, te da algo correcto para comparar."],
+   ["45–60 minutos sin avance", "Buscá una pista (no la solución): foro del juez, libro, lección."],
+   ["Si leíste la solución", "Cerrala, esperá un día y reescribila de cero. Anotalo para repasar."]]
+  .map((x, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${x[0]}</span><span class="s">${x[1]}</span></span></div></li>`).join("")}
+</ul>`)}
+${sec("04", "Evaluación", `
 <table>
 <tr><th>Instancia</th><th>Peso</th><th>Cuándo</th></tr>
 <tr><td>Actividades semanales completadas</td><td>30 %</td><td>Todo el cuatrimestre</td></tr>
@@ -285,9 +323,9 @@ ${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="conf" value="${v}
 <tr><td>Proyecto integrador</td><td>25 %</td><td>Semanas 12–16</td></tr>
 <tr><td>Examen final</td><td>25 %</td><td>Semana 16</td></tr>
 </table>
-<p>Aprobás con <strong>60 %</strong> o más en cada instancia. Rúbrica para cada ejercicio de parcial/final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas), <strong>claridad</strong> (2: nombres, funciones, comentarios del invariante), <strong>casos borde</strong> (1).</p>
-
-<h2>Proyecto integrador: ideas</h2>
+<p class="pullquote">Aprobás con 60 % o más en cada instancia.</p>
+<p>Rúbrica para cada ejercicio de parcial o final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas), <strong>claridad</strong> (2: nombres, funciones, invariantes comentados), <strong>casos borde</strong> (1).</p>`)}
+${sec("05", "Proyecto integrador", `
 <ul>
 <li><strong>Resolvedor de laberintos:</strong> leer un laberinto de un archivo de texto, resolver con BFS/DFS, mostrar el camino y comparar.</li>
 <li><strong>Planificador de rutas:</strong> mapa de ciudades con distancias (por ejemplo, de tu provincia), Dijkstra y MST.</li>
@@ -296,9 +334,8 @@ ${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="conf" value="${v}
 <li><strong>Comparador de ordenamientos:</strong> 6 algoritmos, gráfico de tiempos y análisis de casos (ordenado, inverso, aleatorio).</li>
 <li><strong>Planificador de materias:</strong> correlatividades como grafo dirigido; orden topológico y detección de ciclos.</li>
 </ul>
-<p>Entregable: repositorio con código, tests (asserts), README con el problema, decisiones, ficha de Pólya y análisis de complejidad.</p>
-
-<h2>Configuración técnica</h2>
+<div class="callout"><strong>Entregable:</strong> repositorio con código, tests (asserts) y README con el problema, decisiones, ficha de Pólya y análisis de complejidad.</div>`)}
+${sec("06", "Configuración técnica", `
 <ul>
 <li>Python 3.10+ y VS Code (o Thonny). Un repositorio git propio con una carpeta por semana.</li>
 <li>Cuentas en <a href="https://cses.fi/problemset/" target="_blank" rel="noopener">CSES</a>, <a href="https://aceptaelreto.com/" target="_blank" rel="noopener">Acepta el Reto</a> y <a href="https://leetcode.com/" target="_blank" rel="noopener">LeetCode</a>.</li>
@@ -313,41 +350,34 @@ def main():
     # ...
     print(resultado)
 
-main()</code></pre>
-
-<h2>¿Y ahora qué?</h2>
-<p>Al terminar, seguí con <a href="https://ossu.dev/" target="_blank" rel="noopener">OSSU Computer Science</a> (Core programming / Core theory), el curso de Princeton en Coursera y los problemas restantes del CSES. Si te interesa competir, la <a href="https://usaco.guide/" target="_blank" rel="noopener">USACO Guide</a> y los AtCoder Beginner Contests son el siguiente paso natural.</p>`;
+main()</code></pre>`)}
+${sec("07", "¿Y ahora qué?", `
+<p>Al terminar, seguí con <a href="https://ossu.dev/" target="_blank" rel="noopener">OSSU Computer Science</a> (Core programming / Core theory), el curso de Princeton en Coursera y los problemas restantes del CSES. Si te interesa competir, la <a href="https://usaco.guide/" target="_blank" rel="noopener">USACO Guide</a> y los AtCoder Beginner Contests son el siguiente paso natural.</p>`)}
+</div>`;
   }
 
   function vBiblio() {
     const item = (L) => `<div class="biblio-item"><div class="ti">${esc(L.titulo)}</div>
       <div class="meta">${esc(L.autor)} · ${esc(L.editorial)} · ${esc(L.anio)} · <span class="tag">${L.idioma === "es" ? "español" : "inglés"}</span>
       ${L.url ? ` · <a href="${L.url}" target="_blank" rel="noopener">acceso libre ↗</a>` : ""}${L.local ? ` · <a href="${encodeURI(L.local)}" target="_blank" rel="noopener">PDF local</a>` : ""}</div>
-      <div class="muted" style="font-size:.92rem;margin-top:.25rem">${esc(L.nota)}</div></div>`;
+      <div class="muted" style="font-size:.94rem">${esc(L.nota)}</div></div>`;
     const todos = Object.values(BIBLIO);
-    const link = (x) => `<div class="biblio-item"><div class="ti"><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></div><div class="muted" style="font-size:.92rem">${esc(x.d)}</div></div>`;
-    return `
-<div class="eyebrow">Material</div>
-<h1>Bibliografía y recursos</h1>
-<p class="lead">Los tres libros base cubren el núcleo. El resto amplía, ofrece otro enfoque o es de acceso libre.</p>
-<h2>Libros base</h2>
-${todos.filter((l) => l.base).map(item).join("")}
-<p class="faint">Los enlaces «PDF local» funcionan cuando abrís el sitio desde la carpeta del curso con tus copias de los libros (no se publican en el repositorio).</p>
-<h2>Complementarios en español</h2>
-${todos.filter((l) => !l.base && l.idioma === "es").map(item).join("")}
-<h2>Complementarios en inglés</h2>
-${todos.filter((l) => !l.base && l.idioma === "en").map(item).join("")}
-<h2>Jueces online y práctica</h2>
-${PLATAFORMAS.map(link).join("")}
-<h2>Cursos y videos</h2>
-${CURSOS.map(link).join("")}
-<h2>Visualizadores y referencias</h2>
-${HERRAMIENTAS.map(link).join("")}`;
+    const link = (x) => `<div class="biblio-item"><div class="ti"><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a></div><div class="muted" style="font-size:.94rem">${esc(x.d)}</div></div>`;
+    return pageHero("Material", "Bibliografía <em>y recursos</em>",
+      "Los tres libros base cubren el núcleo. El resto amplía, ofrece otro enfoque o es de acceso libre.") + `
+<div class="wrap">
+${sec("01", "Libros base", todos.filter((l) => l.base).map(item).join("") + `<p class="faint" style="margin-top:1rem">Los enlaces «PDF local» funcionan cuando abrís el sitio desde la carpeta del curso con tus copias de los libros (no se publican en el repositorio).</p>`)}
+${sec("02", "Complementarios en español", todos.filter((l) => !l.base && l.idioma === "es").map(item).join(""))}
+${sec("03", "Complementarios en inglés", todos.filter((l) => !l.base && l.idioma === "en").map(item).join(""))}
+${sec("04", "Jueces online y práctica", PLATAFORMAS.map(link).join(""))}
+${sec("05", "Cursos y videos", CURSOS.map(link).join(""))}
+${sec("06", "Visualizadores y referencias", HERRAMIENTAS.map(link).join(""))}
+</div>`;
   }
 
   function chartHoras() {
     const mins = minutosPorSemana();
-    const W = 640, H = 170, pad = 22, n = SEMANAS.length;
+    const W = 640, H = 180, pad = 24, n = SEMANAS.length;
     const meta = Number(S.config.horasMeta) || 0;
     const max = Math.max(meta, ...SEMANAS.map((s) => (mins[s.n] || 0) / 60), 1);
     const bw = (W - pad * 2) / n;
@@ -355,11 +385,11 @@ ${HERRAMIENTAS.map(link).join("")}`;
     let out = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Horas registradas por semana">`;
     out += `<line class="axis" x1="${pad}" x2="${W - pad}" y1="${H - pad}" y2="${H - pad}"/>`;
     SEMANAS.forEach((s, i) => {
-      const h = (mins[s.n] || 0) / 60, x = pad + i * bw + bw * 0.18, top = y(h);
-      out += `<rect class="b" x="${x}" y="${top}" width="${bw * 0.64}" height="${H - pad - top}" rx="2"><title>Semana ${s.n}: ${h.toFixed(1)} h</title></rect>`;
-      out += `<text x="${x + bw * 0.32}" y="${H - 8}" text-anchor="middle">${s.n}</text>`;
+      const h = (mins[s.n] || 0) / 60, x = pad + i * bw + bw * 0.2, top = y(h);
+      out += `<rect class="b" x="${x}" y="${top}" width="${bw * 0.6}" height="${H - pad - top}" rx="2"><title>Semana ${s.n}: ${h.toFixed(1)} h</title></rect>`;
+      out += `<text x="${x + bw * 0.3}" y="${H - 7}" text-anchor="middle">${s.n}</text>`;
     });
-    if (meta) out += `<line class="goal" x1="${pad}" x2="${W - pad}" y1="${y(meta)}" y2="${y(meta)}"/><text x="${W - pad}" y="${y(meta) - 4}" text-anchor="end">meta ${meta} h</text>`;
+    if (meta) out += `<line class="goal" x1="${pad}" x2="${W - pad}" y1="${y(meta)}" y2="${y(meta)}"/><text x="${W - pad}" y="${y(meta) - 5}" text-anchor="end">meta ${meta} h</text>`;
     return out + "</svg>";
   }
 
@@ -371,21 +401,20 @@ ${HERRAMIENTAS.map(link).join("")}`;
     const sig = semanaSiguiente();
     const sesiones = [...S.sesiones].sort((a, b) => b.fecha.localeCompare(a.fecha) || b.id - a.id);
     const repasar = SEMANAS.filter((s) => S.confianza[s.n] && S.confianza[s.n] <= 2);
-    return `
-<div class="eyebrow">Seguimiento</div>
-<h1>Tu progreso</h1>
-<p><span class="tag ${e.cls}">${e.txt}</span></p>
-
-<div class="grid" style="margin-top:1.2rem">
+    return pageHero("Seguimiento", "Mi <em>progreso</em>", "", `<p><span class="tag ${e.cls}">${e.txt}</span></p>`) + `
+<div class="wrap">
+${sec("01", "Resumen", `
+<div class="stats">
   <div class="stat"><div class="v">${g.pct}%</div><div class="k">${g.hechas} de ${g.total} actividades</div></div>
-  <div class="stat"><div class="v">${(totalMin / 60).toFixed(1)} h</div><div class="k">estudiadas (${S.sesiones.length} sesiones)</div></div>
+  <div class="stat"><div class="v">${(totalMin / 60).toFixed(1)}</div><div class="k">horas en ${S.sesiones.length} sesiones</div></div>
   <div class="stat"><div class="v">${racha()}</div><div class="k">días seguidos de estudio</div></div>
   <div class="stat"><div class="v">${confProm}</div><div class="k">confianza promedio (1–5)</div></div>
 </div>
-${repasar.length ? `<div class="callout warn">Para repasar (confianza baja): ${repasar.map((s) => `<a href="#/semana/${s.n}">semana ${s.n}</a>`).join(", ")}.</div>` : ""}
-
-<h2>Registrar sesión de estudio</h2>
-<form id="f-sesion" class="card">
+${repasar.length ? `<div class="callout warn"><strong>Para repasar</strong> (confianza baja): ${repasar.map((s) => `<a href="#/semana/${s.n}">semana ${s.n}</a>`).join(", ")}.</div>` : ""}
+<h3>Por materia</h3>
+${MATERIAS.map((m) => { const p = progMateria(m); return `<div style="margin:.9rem 0"><div style="display:flex;justify-content:space-between;gap:1rem;font-size:.95rem"><a href="#/materia/${m.id}">${pad2(m.n)} · ${esc(m.nombre)}</a><span class="pct">${p.hechas}/${p.total}</span></div>${bar(p.pct)}</div>`; }).join("")}`)}
+${sec("02", "Registrar sesión", `
+<form id="f-sesion" class="panel">
   <div class="form-row">
     <div class="field"><label for="s-fecha">Fecha</label><input type="date" id="s-fecha" value="${hoyISO()}" required></div>
     <div class="field"><label for="s-min">Minutos</label><input type="number" id="s-min" min="5" max="720" step="5" value="60" required></div>
@@ -394,39 +423,33 @@ ${repasar.length ? `<div class="callout warn">Para repasar (confianza baja): ${r
   <div class="field"><label for="s-nota">¿Qué hiciste? (opcional)</label><input type="text" id="s-nota" maxlength="200" placeholder="Ej.: lectura Joyanes cap. 4 y 2 problemas CSES"></div>
   <button class="btn primary" type="submit">Guardar sesión</button>
 </form>
-
-<h2>Horas por semana</h2>
+<h3>Horas por semana</h3>
 ${chartHoras()}
-
-<h2>Por materia</h2>
-${MATERIAS.map((m) => { const p = progMateria(m); return `<div style="margin:.7rem 0"><div style="display:flex;justify-content:space-between;gap:1rem"><a href="#/materia/${m.id}">${m.n}. ${esc(m.nombre)}</a><span class="pct">${p.hechas}/${p.total}</span></div>${bar(p.pct)}</div>`; }).join("")}
-
-<h2>Historial de sesiones</h2>
+<h3>Historial</h3>
 ${sesiones.length ? `<table><tr><th>Fecha</th><th>Sem.</th><th>Min</th><th>Nota</th><th></th></tr>
-${sesiones.slice(0, 50).map((x) => `<tr><td>${esc(x.fecha)}</td><td>${x.semana}</td><td>${x.min}</td><td>${esc(x.nota)}</td><td><button class="btn" data-del="${x.id}" title="Borrar" style="padding:.1rem .45rem">×</button></td></tr>`).join("")}</table>` : `<p class="faint">Todavía no registraste sesiones.</p>`}
-
-<h2>Configuración</h2>
-<form id="f-config" class="card">
+${sesiones.slice(0, 50).map((x) => `<tr><td>${esc(x.fecha)}</td><td>${x.semana}</td><td>${x.min}</td><td>${esc(x.nota)}</td><td><button class="btn small" data-del="${x.id}" title="Borrar sesión" aria-label="Borrar sesión">×</button></td></tr>`).join("")}</table>` : `<p class="faint">Todavía no registraste sesiones.</p>`}`)}
+${sec("03", "Configuración", `
+<form id="f-config" class="panel">
   <div class="form-row">
     <div class="field"><label for="c-nombre">Tu nombre (opcional)</label><input type="text" id="c-nombre" value="${esc(S.config.nombre)}" maxlength="40"></div>
     <div class="field"><label for="c-inicio">Fecha de inicio</label><input type="date" id="c-inicio" value="${esc(S.config.inicio)}"></div>
-    <div class="field"><label for="c-meta">Meta de horas/semana</label><input type="number" id="c-meta" min="1" max="60" value="${esc(S.config.horasMeta)}"></div>
+    <div class="field"><label for="c-meta">Meta horas/semana</label><input type="number" id="c-meta" min="1" max="60" value="${esc(S.config.horasMeta)}"></div>
   </div>
   <button class="btn primary" type="submit">Guardar configuración</button>
-</form>
-
-<h2>Respaldo</h2>
+</form>`)}
+${sec("04", "Respaldo", `
 <p class="muted">El progreso vive en el almacenamiento local de este navegador. Exportalo para tener copia o pasarlo a otra computadora.</p>
 <div class="btn-row">
-  <button class="btn" id="b-export">Exportar progreso (.json)</button>
-  <label class="btn" for="b-import">Importar progreso…</label><input type="file" id="b-import" accept="application/json,.json" hidden>
+  <button class="btn" id="b-export">Exportar (.json)</button>
+  <label class="btn" for="b-import">Importar…</label><input type="file" id="b-import" accept="application/json,.json" hidden>
   <button class="btn" onclick="window.print()">Imprimir</button>
   <button class="btn danger" id="b-reset">Borrar todo</button>
+</div>`)}
 </div>`;
   }
 
   function vNoEncontrado() {
-    return `<h1>No encontrado</h1><p><a href="#/">Volver al inicio</a></p>`;
+    return pageHero("Error 404", "No <em>encontrado</em>", "<a href=\"#/\">Volver al inicio</a>");
   }
 
   /* ---------- Router ---------- */
@@ -444,10 +467,11 @@ ${sesiones.slice(0, 50).map((x) => `<tr><td>${esc(x.fecha)}</td><td>${x.semana}<
     else if (r === "progreso") html = vProgreso();
     else html = vNoEncontrado();
     app.innerHTML = html;
-    document.querySelectorAll("nav.main a").forEach((x) => x.classList.toggle("active", x.dataset.nav === nav));
+    document.querySelectorAll("#nav-links a").forEach((x) => x.classList.toggle("active", x.dataset.nav === nav));
     const s = r === "semana" ? semana(Number(a)) : null;
     document.title = (s ? `Semana ${s.n} · ` : "") + "Resolución de problemas y algoritmos";
     window.scrollTo(0, 0);
+    cerrarMenu();
   }
   window.addEventListener("hashchange", render);
 
@@ -519,6 +543,13 @@ ${sesiones.slice(0, 50).map((x) => `<tr><td>${esc(x.fecha)}</td><td>${x.semana}<
     } else if (el.id === "b-reset") {
       if (confirm("¿Borrar TODO tu progreso, notas y sesiones? No se puede deshacer (exportá antes).")) { S = vacio(); guardar(); render(); toast("Progreso borrado"); }
     }
+  });
+
+  /* ---------- Menú móvil ---------- */
+  function cerrarMenu() { $("#nav").classList.remove("is-open"); $("#nav-toggle").setAttribute("aria-expanded", "false"); }
+  $("#nav-toggle").addEventListener("click", () => {
+    const abierto = $("#nav").classList.toggle("is-open");
+    $("#nav-toggle").setAttribute("aria-expanded", String(abierto));
   });
 
   /* ---------- Tema ---------- */
