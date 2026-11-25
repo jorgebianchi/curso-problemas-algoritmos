@@ -114,7 +114,7 @@ footer { border-top: 1px solid var(--line); padding: 26px 0; color: var(--muted)
 .page-hero .hero-lead { max-width: 760px; }
 
 .band { background: var(--charcoal); color: var(--on-charcoal); min-height: 52px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; font-size: .76rem; letter-spacing: .18em; text-transform: uppercase; }
-.band .track { display: inline-flex; gap: 2.4rem; animation: marquee 50s linear infinite; padding-left: 2.4rem; }
+.band .track { display: inline-flex; gap: 2.4rem; animation: marquee 120s linear infinite; padding-left: 2.4rem; }
 .band .track span::before { content: "●"; color: var(--rust); margin-right: 2.4rem; font-size: .6rem; vertical-align: middle; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
