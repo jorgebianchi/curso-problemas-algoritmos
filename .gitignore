@@ -1,3 +1,4 @@
 # Libros con derechos de autor: se usan en local, no se publican
 *.pdf
 .DS_Store
+!descargas/*.pdf

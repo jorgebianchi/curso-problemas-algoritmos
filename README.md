@@ -33,6 +33,10 @@ Cada semana incluye objetivos, una lección con ejemplos en Python, lecturas por
 
 Los PDF de estos libros **no** se incluyen en el repositorio (derechos de autor).
 
+## Descargas
+
+- [`descargas/ficha-polya.pdf`](descargas/ficha-polya.pdf): ficha imprimible con las 4 fases de Pólya (A4, 2 páginas). Fuente editable: `descargas/ficha-polya.html` (se regenera imprimiendo a PDF desde Chrome).
+
 ## Uso local
 
 ```bash

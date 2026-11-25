@@ -241,7 +241,7 @@ const SEMANAS = [
 <li><em>Introducí notación</em>: nombrar las cosas ayuda a pensar.</li>
 <li><em>Buscá un invariante</em>: algo que no cambia mientras el proceso avanza.</li>
 </ul>
-<div class="callout"><strong>Hábito clave:</strong> para cada problema escribí una ficha con las 4 fases (plantilla en la <a href="#/guia">Guía</a>). Cuesta al principio; es lo que más acelera el aprendizaje.</div>
+<div class="callout"><strong>Hábito clave:</strong> para cada problema escribí una ficha con las 4 fases. <a href="descargas/ficha-polya.pdf" download="ficha-polya.pdf">Descargá la plantilla en PDF</a> o usá la versión de texto de la <a href="#/guia">Guía</a>. Cuesta al principio; es lo que más acelera el aprendizaje.</div>
 <h4>Ejemplo resuelto</h4>
 <p><em>¿Cuántos apretones de mano hay si 10 personas se saludan todas entre sí una vez?</em></p>
 <p><strong>Comprender:</strong> incógnita = cantidad de pares distintos. <strong>Plan:</strong> casos chicos: 2 personas → 1, 3 → 3, 4 → 6. Patrón: al agregar la persona n saluda a las n−1 anteriores, así que el total es 1+2+…+(n−1). <strong>Ejecutar:</strong> 1+…+9 = 45. <strong>Examinar:</strong> otra vía: cada una de las 10 personas da 9 apretones, y cada apretón se contó 2 veces: 10·9/2 = 45 ✓. Generaliza a n(n−1)/2.</p>`,

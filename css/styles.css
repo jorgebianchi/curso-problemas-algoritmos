@@ -205,7 +205,11 @@ footer { border-top: 1px solid var(--line); padding: 26px 0; color: var(--muted)
 .task.done label .tx { color: var(--faint); text-decoration: line-through; text-decoration-color: var(--rust); }
 .task .kind { font-size: .68rem; text-transform: uppercase; letter-spacing: .16em; color: var(--rust); font-weight: 500; display: block; margin-bottom: 2px; }
 .task.examen .kind, .task.proyecto .kind { background: var(--rust); color: #fff; display: inline-block; padding: 1px 8px; border-radius: 99px; }
-.task > a { font-size: .85rem; white-space: nowrap; }
+.task-links { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: .85rem; white-space: nowrap; }
+.task-links:empty { display: none; }
+a.dl { display: inline-flex; align-items: center; gap: .3em; color: var(--rust-dark); text-decoration: none; font-size: .88em; white-space: nowrap; border-bottom: 1px solid var(--rust-soft); }
+a.dl:hover { border-bottom-color: var(--rust); }
+a.dl .arr, .btn .arr { margin-left: 0; }
 
 .lesson h4 { color: var(--ink); }
 .lesson > p:first-child { font-size: 1.15rem; line-height: 1.55; color: var(--ink); }
@@ -300,7 +304,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--rust); outline: 
   .page-hero { padding: 44px 0 32px; }
   .page-hero::after { width: 240px; height: 240px; right: -110px; top: -120px; }
   .task { flex-wrap: wrap; }
-  .task > a { margin-left: calc(20px + .9rem); }
+  .task-links { margin-left: calc(20px + .9rem); flex-direction: row; gap: 14px; }
   .btn-row .btn { flex: 1 1 auto; }
   .nav-toggle { display: grid; }
   .nav-links { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 28px rgba(0, 0, 0, .14); }

@@ -6,6 +6,9 @@
   const THEME_KEY = "rpa-tema";
   const $ = (s, r = document) => r.querySelector(s);
   const ARR = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const FICHA = "descargas/ficha-polya.pdf";
+  const DL = '<svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5v6.5M3.2 5.4 6 8.2l2.8-2.8M2 10.5h8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const fichaLink = (txt = "Descargar ficha (PDF)") => `<a class="dl" href="${FICHA}" download="ficha-polya.pdf">${DL}<span>${txt}</span></a>`;
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado ---------- */
@@ -111,7 +114,7 @@
       ["Configurá tu cuatrimestre", "Fecha de inicio y meta de horas en <a href=\"#/progreso\">Mi progreso</a>."],
       ["Leé la lección de la semana", "Ideas clave, ejemplos resueltos y código comentado."],
       ["Hacé las lecturas indicadas", "Capítulos concretos de Pólya, Joyanes y bibliografía complementaria."],
-      ["Resolvé problemas reales", "Con la ficha de Pólya y en jueces online, hasta obtener «Accepted»."],
+      ["Resolvé problemas reales", `Con la ficha de Pólya y en jueces online, hasta obtener «Accepted». ${fichaLink()}`],
       ["Marcá, registrá y reflexioná", "Actividades, horas, confianza y notas: tu avance queda a la vista."],
       ["Evaluate", "Parcial en la semana 8; examen final y proyecto integrador en la 16."]
     ];
@@ -247,14 +250,14 @@ ${sec("02", "Lección", `<div class="lesson">${s.leccion}</div>`)}
 ${sec("03", "Lecturas", `<ul class="modules simple">${s.lecturas.map((l, i) => `<li><div class="mod"><span class="n">${pad2(i + 1)}</span><span><span class="t">${esc(l.c)}</span><span class="s">${esc(libro(l.b).autor)} — <em>${esc(libro(l.b).titulo)}</em>${linkLibro(l.b)}</span></span></div></li>`).join("")}</ul>`)}
 ${sec("04", "Recursos", `<ul>${s.recursos.map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}${ARR}</a></li>`).join("")}</ul>`)}
 ${sec("05", "Actividades", `
-<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya.</p>
+<p class="muted">Marcá cada actividad al terminarla. En los problemas, «terminada» = aceptada por el juez <em>y</em> con ficha de Pólya. ${fichaLink()}</p>
 <ul class="tasks">
 ${s.tareas.map((t, i) => {
   const id = tid(n, i), done = !!S.tareas[id];
   return `<li class="task ${t.t}${done ? " done" : ""}">
     <input type="checkbox" id="${id}" data-task="${id}" ${done ? "checked" : ""}>
     <label for="${id}"><span class="kind">${TIPOS[t.t] || t.t}</span><span class="tx">${esc(t.x)}</span></label>
-    ${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir${ARR}</a>` : ""}
+    <span class="task-links">${t.u ? `<a href="${t.u}" target="_blank" rel="noopener">abrir${ARR}</a>` : ""}${/ficha/i.test(t.x) ? fichaLink("ficha PDF") : ""}</span>
   </li>`;
 }).join("")}
 </ul>`)}
@@ -290,7 +293,8 @@ ${sec("01", "Rutina semanal", `
 <tr><td>Vie / sáb</td><td>2–3 h</td><td>Reflexión, autoevaluación, notas y repaso. Proyecto (semanas 12–16).</td></tr>
 </table>`)}
 ${sec("02", "Ficha de Pólya", `
-<p>Usala en <strong>cada</strong> problema. Pegala en tus notas de semana o en un archivo por problema.</p>
+<p>Usala en <strong>cada</strong> problema. Descargá la versión imprimible (A4, 2 páginas) o copiá la versión de texto en tus notas de semana.</p>
+<div class="btn-row" style="margin:0 0 1.4rem"><a class="btn primary" href="${FICHA}" download="ficha-polya.pdf">${DL}Descargar ficha de Pólya (PDF)</a></div>
 <pre><code>PROBLEMA: (nombre + link)
 1. COMPRENDER
    - Incógnita / qué devolver:
@@ -324,7 +328,7 @@ ${sec("04", "Evaluación", `
 <tr><td>Examen final</td><td>25 %</td><td>Semana 16</td></tr>
 </table>
 <p class="pullquote">Aprobás con 60 % o más en cada instancia.</p>
-<p>Rúbrica para cada ejercicio de parcial o final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas), <strong>claridad</strong> (2: nombres, funciones, invariantes comentados), <strong>casos borde</strong> (1).</p>`)}
+<p>Rúbrica para cada ejercicio de parcial o final (sobre 10): <strong>correctitud</strong> (4: el juez lo acepta o el argumento es válido), <strong>análisis</strong> (3: ficha de Pólya y complejidad justificadas — ${fichaLink("descargar ficha")}), <strong>claridad</strong> (2: nombres, funciones, invariantes comentados), <strong>casos borde</strong> (1).</p>`)}
 ${sec("05", "Proyecto integrador", `
 <ul>
 <li><strong>Resolvedor de laberintos:</strong> leer un laberinto de un archivo de texto, resolver con BFS/DFS, mostrar el camino y comparar.</li>
@@ -334,7 +338,7 @@ ${sec("05", "Proyecto integrador", `
 <li><strong>Comparador de ordenamientos:</strong> 6 algoritmos, gráfico de tiempos y análisis de casos (ordenado, inverso, aleatorio).</li>
 <li><strong>Planificador de materias:</strong> correlatividades como grafo dirigido; orden topológico y detección de ciclos.</li>
 </ul>
-<div class="callout"><strong>Entregable:</strong> repositorio con código, tests (asserts) y README con el problema, decisiones, ficha de Pólya y análisis de complejidad.</div>`)}
+<div class="callout"><strong>Entregable:</strong> repositorio con código, tests (asserts) y README con el problema, decisiones, ficha de Pólya (${fichaLink("descargar")}) y análisis de complejidad.</div>`)}
 ${sec("06", "Configuración técnica", `
 <ul>
 <li>Python 3.10+ y VS Code (o Thonny). Un repositorio git propio con una carpeta por semana.</li>

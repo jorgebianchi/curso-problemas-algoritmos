@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ficha de Pólya — Resolución de problemas y algoritmos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300&display=swap">
+<style>
+  @page { size: A4; margin: 14mm 15mm 13mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 9.6pt/1.4 "Bitter", Georgia, serif; color: #24211f; font-weight: 400; }
+  .page { height: 269mm; display: flex; flex-direction: column; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .eyebrow { font-size: 7pt; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; color: #ff5a00; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid #24211f; padding-bottom: 3mm; margin-bottom: 4mm; }
+  h1 { font-weight: 300; font-size: 24pt; letter-spacing: -.02em; line-height: 1; margin: 1.5mm 0 0; }
+  h1 em { color: #ff5a00; font-weight: 300; }
+  .meta { display: grid; grid-template-columns: 2.2fr 1fr 1fr; gap: 4mm; margin-bottom: 4mm; }
+  .meta div, .field { border-bottom: 1px solid rgba(36,33,31,.35); padding-top: 4.5mm; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: #625e58; }
+  .phase { flex: 0 0 auto; display: grid; grid-template-columns: 13mm 1fr; gap: 3mm; border-top: 1px solid rgba(36,33,31,.16); padding-top: 3mm; margin-top: 2mm; }
+  .num { font-size: 20pt; font-weight: 300; color: #ff5a00; line-height: 1; }
+  .phase h2 { font-weight: 400; font-size: 13pt; margin: 0 0 .8mm; letter-spacing: -.01em; }
+  .q { color: #625e58; font-size: 8.2pt; font-style: italic; font-weight: 300; margin: 0 0 2mm; }
+  .boxes { display: grid; gap: 2.5mm; }
+  .box { border: 1px solid rgba(36,33,31,.2); border-radius: 1.2mm; padding: 1.6mm 2.4mm; position: relative;
+         background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 6.6mm, rgba(36,33,31,.09) 6.6mm, rgba(36,33,31,.09) calc(6.6mm + 1px)); background-position: 0 6mm; }
+  .box b { font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: #24211f; display: block; }
+  .two { grid-template-columns: 1fr 1fr; }
+  .checks { display: flex; flex-wrap: wrap; gap: 1.2mm 4.5mm; font-size: 8pt; margin-top: 1mm; color: #45413b; }
+  .checks span::before { content: ""; display: inline-block; width: 2.6mm; height: 2.6mm; border: 1px solid #24211f; border-radius: .5mm; margin-right: 1.4mm; vertical-align: -.3mm; }
+  footer { margin-top: auto !important; display: flex; justify-content: space-between; font-size: 6.8pt; color: #8c867d; border-top: 1px solid rgba(36,33,31,.16); padding-top: 2mm; margin-top: 3mm; }
+  .verdict { display: flex; gap: 3mm; font-size: 8pt; }
+  .verdict span { border: 1px solid #24211f; border-radius: 99px; padding: .3mm 2.6mm; }
+</style>
+</head>
+<body>
+<section class="page">
+  <header>
+    <div><div class="eyebrow">Resolución de problemas y algoritmos · Ficha de trabajo</div><h1>Ficha de <em>Pólya</em></h1></div>
+    <div class="eyebrow" style="color:#625e58">Página 1 / 2</div>
+  </header>
+  <div class="meta"><div>Problema (nombre y link)</div><div>Semana</div><div>Fecha</div></div>
+
+  <div class="phase" style="flex:1.15">
+    <div class="num">01</div>
+    <div>
+      <h2>Comprender el problema</h2>
+      <p class="q">¿Cuál es la incógnita? ¿Cuáles son los datos? ¿Cuál es la condición? ¿Es suficiente la condición para determinar la incógnita?</p>
+      <div class="boxes two">
+        <div class="box" style="height:21mm"><b>Incógnita / qué devolver</b></div>
+        <div class="box" style="height:21mm"><b>Datos y restricciones (n máx., rangos)</b></div>
+      </div>
+      <div class="boxes two" style="margin-top:2.5mm">
+        <div class="box" style="height:42mm"><b>Ejemplo propio resuelto a mano</b></div>
+        <div class="box" style="height:42mm"><b>Casos borde</b></div>
+      </div>
+      <div class="checks"><span>Lo reformulé con mis palabras</span><span>Hice un dibujo / tabla</span><span>Introduje notación</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">02</div>
+    <div>
+      <h2>Concebir un plan</h2>
+      <p class="q">¿Conocés un problema relacionado? ¿Podés resolver una parte, un caso particular o un problema más simple? ¿Usaste todos los datos?</p>
+      <div class="boxes two">
+        <div class="box" style="height:22mm"><b>Problema parecido que ya resolví</b></div>
+        <div class="box" style="height:22mm"><b>Complejidad esperada · ¿alcanza?</b></div>
+      </div>
+      <div class="boxes" style="margin-top:2.5mm"><div class="box" style="height:46mm"><b>Idea / estrategia</b></div></div>
+      <div class="checks"><span>Fuerza bruta</span><span>Ordenar</span><span>Búsqueda binaria</span><span>Dos punteros</span><span>Hash</span><span>Pila / cola</span><span>Recursión / backtracking</span><span>Voraz</span><span>Prog. dinámica</span><span>Grafo (BFS/DFS)</span><span>Otra</span></div>
+    </div>
+  </div>
+
+  <footer><span>Basado en G. Pólya, «Cómo plantear y resolver problemas»</span><span>jorgebianchi.github.io/curso-problemas-algoritmos</span></footer>
+</section>
+
+<section class="page">
+  <header>
+    <div><div class="eyebrow">Resolución de problemas y algoritmos · Ficha de trabajo</div><h1>Ficha de <em>Pólya</em></h1></div>
+    <div class="eyebrow" style="color:#625e58">Página 2 / 2</div>
+  </header>
+
+  <div class="phase" style="flex:1.25">
+    <div class="num">03</div>
+    <div>
+      <h2>Ejecutar el plan</h2>
+      <p class="q">Al ejecutar tu plan, comprobá cada uno de los pasos. ¿Podés ver claramente que el paso es correcto? ¿Podés demostrarlo?</p>
+      <div class="boxes"><div class="box" style="height:74mm"><b>Pseudocódigo</b></div></div>
+      <div class="boxes two" style="margin-top:2.5mm">
+        <div class="box" style="height:32mm"><b>Traza / prueba de escritorio</b></div>
+        <div class="box" style="height:32mm"><b>Envíos al juez y qué corregí</b></div>
+      </div>
+      <div class="checks" style="margin-top:2mm">Veredicto final:<span>AC</span><span>WA</span><span>TLE</span><span>RE</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">04</div>
+    <div>
+      <h2>Examinar la solución</h2>
+      <p class="q">¿Podés verificar el resultado? ¿Obtenerlo de otra forma? ¿Podés emplear el resultado o el método en algún otro problema?</p>
+      <div class="boxes two">
+        <div class="box" style="height:32mm"><b>¿Por qué es correcto? (invariante / argumento)</b></div>
+        <div class="box" style="height:32mm"><b>Otra forma de resolverlo</b></div>
+      </div>
+      <div class="boxes" style="margin-top:2.5mm"><div class="box" style="height:26mm"><b>Qué aprendí que puedo reutilizar</b></div></div>
+      <div class="checks"><span>Lo resolví sin ayuda</span><span>Usé una pista</span><span>Leí la solución → rehacer en</span>&nbsp;____ días &nbsp;·&nbsp; Tiempo total: ______ min</div>
+    </div>
+  </div>
+
+  <footer><span>Basado en G. Pólya, «Cómo plantear y resolver problemas»</span><span>jorgebianchi.github.io/curso-problemas-algoritmos</span></footer>
+</section>
+</body>
+</html>
